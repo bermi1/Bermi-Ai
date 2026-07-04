@@ -13,10 +13,10 @@ from sqlalchemy import func, select
 
 from ..auth import get_current_user, is_restricted
 from ..database import db_session
-from ..models import Conversation, Message, User
+from ..models import Conversation, Message, User, UserProfile
 from ..schemas import ChatRequest
 from ..services.model_router import model_router
-from ..services.prompts import build_chat_system
+from ..services.prompts import build_chat_system, build_profile_block
 from ..services.rag import build_context_block, retrieve
 
 router = APIRouter(prefix="/api/chat", tags=["chat"])
@@ -62,6 +62,17 @@ async def chat(body: ChatRequest, user: User = Depends(get_current_user)):
             .limit(HISTORY_LIMIT)
         )
         history = list(reversed(db.execute(history_stmt).scalars().all()))
+
+        profile = db.execute(
+            select(UserProfile).where(
+                UserProfile.user_id == user.id, UserProfile.status == "completed"
+            )
+        ).scalar_one_or_none()
+        profile_block = (
+            build_profile_block(profile.profile_markdown, profile.niche_summary)
+            if profile
+            else None
+        )
     finally:
         db.close()
 
@@ -74,7 +85,9 @@ async def chat(body: ChatRequest, user: User = Depends(get_current_user)):
         # Retrieval (org-scoped, always).
         db = db_session()
         try:
-            sources = await retrieve(db, org_id, body.content)
+            # Students query only their organisation's materials; everyone
+            # else also draws on the system-wide policy library.
+            sources = await retrieve(db, org_id, body.content, include_system=not restricted)
         except Exception as exc:
             sources = []
             yield _sse("warning", {"message": f"Knowledge base retrieval failed: {exc}"})
@@ -85,7 +98,7 @@ async def chat(body: ChatRequest, user: User = Depends(get_current_user)):
         if source_dicts:
             yield _sse("sources", source_dicts)
 
-        system = build_chat_system(build_context_block(sources), restricted)
+        system = build_chat_system(build_context_block(sources), restricted, profile_block)
         messages = [{"role": "system", "content": system}] + [
             {"role": m.role, "content": m.content} for m in history
         ]

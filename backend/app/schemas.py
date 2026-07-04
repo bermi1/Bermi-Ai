@@ -41,6 +41,7 @@ class UserOut(BaseModel):
     role: str
     org_id: str
     organization: OrganizationOut | None = None
+    onboarding_status: str = "pending"  # pending|completed|skipped
 
     class Config:
         from_attributes = True
@@ -91,12 +92,24 @@ class ChatRequest(BaseModel):
     mode: str = "general"
 
 
+# ── Onboarding / profile ──────────────────────────────────────────────
+class OnboardingSubmit(BaseModel):
+    answers: dict[str, str]
+
+
+class ProfileOut(BaseModel):
+    status: str  # pending|completed|skipped
+    profile_markdown: str | None = None
+    niche_summary: str | None = None
+
+
 # ── Documents ─────────────────────────────────────────────────────────
 class DocumentOut(BaseModel):
     id: str
     filename: str
     content_type: str
     status: str
+    scope: str = "org"
     error: str | None = None
     page_count: int
     chunk_count: int

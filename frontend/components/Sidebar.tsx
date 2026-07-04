@@ -7,13 +7,13 @@ interface Props {
   user: User;
   conversations: Conversation[];
   activeId: string | null;
-  view: "chat" | "documents";
+  view: "chat" | "documents" | "profile" | "integrations";
   open: boolean;
   onClose: () => void;
   onNewChat: () => void;
   onSelectConversation: (id: string) => void;
   onDeleteConversation: (id: string) => void;
-  onOpenDocuments: () => void;
+  onOpenView: (view: "documents" | "profile" | "integrations") => void;
   onLogout: () => void;
 }
 
@@ -34,9 +34,22 @@ export default function Sidebar({
   onNewChat,
   onSelectConversation,
   onDeleteConversation,
-  onOpenDocuments,
+  onOpenView,
   onLogout,
 }: Props) {
+  const navItem = (target: "documents" | "profile" | "integrations", label: string) => (
+    <button
+      type="button"
+      onClick={() => onOpenView(target)}
+      className={`w-full rounded-lg px-3 py-2 text-left text-sm transition-colors ${
+        view === target
+          ? "bg-stone-200/80 font-medium dark:bg-stone-700/60"
+          : "text-stone-600 hover:bg-stone-200/60 dark:text-stone-300 dark:hover:bg-stone-700/40"
+      }`}
+    >
+      {label}
+    </button>
+  );
   return (
     <>
       {/* Mobile scrim */}
@@ -61,18 +74,10 @@ export default function Sidebar({
           </button>
         </div>
 
-        <nav className="mt-3 px-3">
-          <button
-            type="button"
-            onClick={onOpenDocuments}
-            className={`w-full rounded-lg px-3 py-2 text-left text-sm transition-colors ${
-              view === "documents"
-                ? "bg-stone-200/80 font-medium dark:bg-stone-700/60"
-                : "text-stone-600 hover:bg-stone-200/60 dark:text-stone-300 dark:hover:bg-stone-700/40"
-            }`}
-          >
-            📚 Knowledge base
-          </button>
+        <nav className="mt-3 space-y-0.5 px-3">
+          {navItem("documents", "📚 Knowledge base")}
+          {user.role !== "student" && navItem("profile", "🎯 My niche")}
+          {user.role !== "student" && navItem("integrations", "🔌 Integrations")}
         </nav>
 
         <div className="mt-4 flex-1 overflow-y-auto px-3 pb-2">

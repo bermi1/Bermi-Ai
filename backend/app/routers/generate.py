@@ -4,13 +4,15 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
+from sqlalchemy import select
+
 from ..auth import get_current_user, is_restricted
 from ..database import get_db
-from ..models import Artifact, Conversation, Message, User
+from ..models import Artifact, Conversation, Message, User, UserProfile
 from ..schemas import ArtifactOut, GenerateDocumentRequest
 from ..services.docgen import extract_title, save_docx
 from ..services.model_router import model_router
-from ..services.prompts import build_docgen_system
+from ..services.prompts import build_docgen_system, build_profile_block
 from ..services.rag import build_context_block, retrieve
 
 router = APIRouter(prefix="/api", tags=["generate"])
@@ -54,7 +56,16 @@ async def generate_document(
         except Exception:
             context_block = None  # generation still works without retrieval
 
-    system = build_docgen_system(kind, context_block)
+    profile = db.execute(
+        select(UserProfile).where(
+            UserProfile.user_id == user.id, UserProfile.status == "completed"
+        )
+    ).scalar_one_or_none()
+    profile_block = (
+        build_profile_block(profile.profile_markdown, profile.niche_summary) if profile else None
+    )
+
+    system = build_docgen_system(kind, context_block, profile_block)
     title_hint = f' titled "{body.title}"' if body.title else ""
     prompt = f"Write a {KIND_LABELS[kind]}{title_hint} based on this brief:\n\n{body.brief}"
 

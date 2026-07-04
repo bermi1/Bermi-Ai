@@ -12,6 +12,22 @@ export interface User {
   role: "student" | "teacher" | "org_admin" | "super_admin";
   org_id: string;
   organization?: Organization | null;
+  onboarding_status: "pending" | "completed" | "skipped";
+}
+
+export interface Profile {
+  status: "pending" | "completed" | "skipped";
+  profile_markdown?: string | null;
+  niche_summary?: string | null;
+}
+
+export interface Integration {
+  id: string;
+  name: string;
+  description: string;
+  available: boolean;
+  connected: boolean;
+  note?: string | null;
 }
 
 export interface Conversation {
@@ -46,6 +62,7 @@ export interface Doc {
   filename: string;
   content_type: string;
   status: "processing" | "ready" | "failed";
+  scope: "org" | "system";
   error?: string | null;
   page_count: number;
   chunk_count: number;

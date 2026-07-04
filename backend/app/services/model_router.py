@@ -111,8 +111,8 @@ class ModelRouter:
                 "base and would be cited here as [1], [2], … in a live deployment.\n\n"
             )
         text += (
-            "Set `LLM_API_KEY` (e.g. an OpenRouter key) in the backend environment "
-            "to receive real model responses."
+            "Set `LLM_API_KEY` in the backend environment to receive real "
+            "responses from the Bermi AI v1 model."
         )
         # Stream word-by-word so the frontend streaming path is exercised.
         for word in text.split(" "):

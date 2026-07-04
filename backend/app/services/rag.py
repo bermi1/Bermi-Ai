@@ -3,7 +3,7 @@ context block for the model."""
 
 from dataclasses import dataclass
 
-from sqlalchemy import select
+from sqlalchemy import or_, select
 from sqlalchemy.orm import Session
 
 from ..config import get_settings
@@ -34,17 +34,28 @@ class RetrievedSource:
         }
 
 
-async def retrieve(db: Session, org_id: str, query: str, top_k: int | None = None) -> list[RetrievedSource]:
-    """Vector search over the organisation's document chunks (org-scoped, always)."""
+async def retrieve(
+    db: Session,
+    org_id: str,
+    query: str,
+    top_k: int | None = None,
+    include_system: bool = True,
+) -> list[RetrievedSource]:
+    """Vector search over the organisation's chunks plus (optionally) the
+    system-wide policy library. Never crosses into other organisations."""
     settings = get_settings()
     k = top_k or settings.rag_top_k
 
     query_embedding = await embed_query(query)
 
+    scope_filter = DocumentChunk.org_id == org_id
+    if include_system:
+        scope_filter = or_(scope_filter, DocumentChunk.org_id.is_(None))
+
     stmt = (
         select(DocumentChunk, Document.filename)
         .join(Document, Document.id == DocumentChunk.document_id)
-        .where(DocumentChunk.org_id == org_id, Document.status == "ready")
+        .where(scope_filter, Document.status == "ready")
         .order_by(DocumentChunk.embedding.cosine_distance(query_embedding))
         .limit(k)
     )

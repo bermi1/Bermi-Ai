@@ -19,6 +19,17 @@ class Settings(BaseSettings):
     llm_api_key: str = ""
     llm_chat_model: str = "qwen/qwen3-32b"
     llm_light_model: str = "meta-llama/llama-3.1-8b-instruct"
+    # Public-facing model identity. The assistant introduces itself with this
+    # name and never reveals the underlying provider or model.
+    model_display_name: str = "Bermi AI v1"
+
+    # Comma-separated emails that are promoted to super_admin on login/register.
+    # Super admins manage the private system-wide policy library.
+    super_admin_emails: str = ""
+
+    # Google integration (Calendar) — leave empty until OAuth credentials exist.
+    google_client_id: str = ""
+    google_client_secret: str = ""
 
     # Embeddings (OpenAI-compatible /embeddings endpoint)
     embeddings_api_base: str = "https://openrouter.ai/api/v1"
@@ -40,6 +51,10 @@ class Settings(BaseSettings):
     @property
     def cors_origin_list(self) -> list[str]:
         return [o.strip() for o in self.cors_origins.split(",") if o.strip()]
+
+    @property
+    def super_admin_email_list(self) -> list[str]:
+        return [e.strip().lower() for e in self.super_admin_emails.split(",") if e.strip()]
 
 
 @lru_cache

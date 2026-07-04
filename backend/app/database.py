@@ -30,6 +30,17 @@ def init_db() -> None:
 
     Base.metadata.create_all(bind=engine)
 
+    # Lightweight idempotent upgrades for databases created by earlier
+    # versions (create_all does not alter existing tables).
+    with engine.connect() as conn:
+        for ddl in (
+            "ALTER TABLE documents ADD COLUMN IF NOT EXISTS scope VARCHAR(16) DEFAULT 'org' NOT NULL",
+            "ALTER TABLE documents ALTER COLUMN org_id DROP NOT NULL",
+            "ALTER TABLE document_chunks ALTER COLUMN org_id DROP NOT NULL",
+        ):
+            conn.execute(text(ddl))
+        conn.commit()
+
 
 def db_session() -> Session:
     """Plain session for background tasks (caller must close)."""

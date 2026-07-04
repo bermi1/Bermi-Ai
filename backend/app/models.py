@@ -92,7 +92,12 @@ class Document(Base):
     __tablename__ = "documents"
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid)
-    org_id: Mapped[str] = mapped_column(ForeignKey("organizations.id"), index=True)
+    # org_id is NULL for system-scope documents (the private policy library,
+    # e.g. Tanzania Vision 2050) which inform answers for every organisation.
+    org_id: Mapped[str | None] = mapped_column(
+        ForeignKey("organizations.id"), index=True, nullable=True
+    )
+    scope: Mapped[str] = mapped_column(String(16), default="org")  # org|system
     uploaded_by: Mapped[str] = mapped_column(ForeignKey("users.id"))
     filename: Mapped[str] = mapped_column(String(512))
     content_type: Mapped[str] = mapped_column(String(128))
@@ -115,7 +120,10 @@ class DocumentChunk(Base):
     document_id: Mapped[str] = mapped_column(
         ForeignKey("documents.id", ondelete="CASCADE"), index=True
     )
-    org_id: Mapped[str] = mapped_column(ForeignKey("organizations.id"), index=True)
+    # NULL for system-scope (policy library) chunks — retrievable by all orgs.
+    org_id: Mapped[str | None] = mapped_column(
+        ForeignKey("organizations.id"), index=True, nullable=True
+    )
     chunk_index: Mapped[int] = mapped_column(Integer)
     text: Mapped[str] = mapped_column(Text)
     page: Mapped[int | None] = mapped_column(Integer, nullable=True)
@@ -123,6 +131,26 @@ class DocumentChunk(Base):
     embedding: Mapped[list[float]] = mapped_column(Vector(EMBED_DIM))
 
     document: Mapped[Document] = relationship(back_populates="chunks")
+
+
+class UserProfile(Base):
+    """Onboarding output: who this user is and their identified niche.
+
+    Injected into the model's context so Bermi AI personalises every answer.
+    """
+
+    __tablename__ = "user_profiles"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid)
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), unique=True, index=True)
+    status: Mapped[str] = mapped_column(String(16), default="completed")  # completed|skipped
+    answers: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    profile_markdown: Mapped[str | None] = mapped_column(Text, nullable=True)
+    niche_summary: Mapped[str | None] = mapped_column(Text, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
 
 
 class Artifact(Base):

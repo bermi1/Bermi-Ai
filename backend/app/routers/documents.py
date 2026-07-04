@@ -1,7 +1,7 @@
 import os
 import uuid
 
-from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, UploadFile, status
+from fastapi import APIRouter, BackgroundTasks, Depends, Form, HTTPException, UploadFile, status
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -25,9 +25,18 @@ uploader = require_roles("teacher", "org_admin", "super_admin")
 async def upload_document(
     file: UploadFile,
     background: BackgroundTasks,
+    scope: str = Form("org"),
     user: User = Depends(uploader),
     db: Session = Depends(get_db),
 ):
+    # "system" scope = the private policy library (e.g. Tanzania Vision 2050):
+    # informs answers for every organisation but is never listed publicly.
+    if scope not in ("org", "system"):
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, "scope must be org or system")
+    if scope == "system" and user.role != "super_admin":
+        raise HTTPException(
+            status.HTTP_403_FORBIDDEN, "Only super admins manage the system policy library"
+        )
     filename = file.filename or "upload"
     if not filename.lower().endswith(ALLOWED_EXTENSIONS):
         raise HTTPException(
@@ -41,14 +50,15 @@ async def upload_document(
         raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, "File is empty")
 
     settings = get_settings()
-    org_dir = os.path.join(settings.upload_dir, user.org_id)
+    org_dir = os.path.join(settings.upload_dir, "system" if scope == "system" else user.org_id)
     os.makedirs(org_dir, exist_ok=True)
     storage_path = os.path.join(org_dir, f"{uuid.uuid4().hex}_{os.path.basename(filename)}")
     with open(storage_path, "wb") as f:
         f.write(data)
 
     doc = Document(
-        org_id=user.org_id,
+        org_id=None if scope == "system" else user.org_id,
+        scope=scope,
         uploaded_by=user.id,
         filename=filename,
         content_type=file.content_type or "application/octet-stream",
@@ -64,13 +74,27 @@ async def upload_document(
 
 
 @router.get("", response_model=list[DocumentOut])
-def list_documents(user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    stmt = (
-        select(Document)
-        .where(Document.org_id == user.org_id)
-        .order_by(Document.created_at.desc())
-    )
+def list_documents(
+    scope: str = "org",
+    user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    # The system policy library is only listed for super admins — for everyone
+    # else it silently informs answers (with citations) but is never shown.
+    if scope == "system":
+        if user.role != "super_admin":
+            raise HTTPException(status.HTTP_403_FORBIDDEN, "Insufficient permissions")
+        where = Document.scope == "system"
+    else:
+        where = Document.org_id == user.org_id
+    stmt = select(Document).where(where).order_by(Document.created_at.desc())
     return db.execute(stmt).scalars().all()
+
+
+def _can_access_doc(doc: Document | None, user: User) -> bool:
+    if doc is None:
+        return False
+    return doc.org_id == user.org_id or doc.scope == "system"
 
 
 @router.get("/{document_id}", response_model=DocumentOut)
@@ -78,7 +102,7 @@ def get_document(
     document_id: str, user: User = Depends(get_current_user), db: Session = Depends(get_db)
 ):
     doc = db.get(Document, document_id)
-    if doc is None or doc.org_id != user.org_id:
+    if not _can_access_doc(doc, user):
         raise HTTPException(status.HTTP_404_NOT_FOUND, "Document not found")
     return doc
 
@@ -88,9 +112,10 @@ def get_chunk(
     chunk_id: str, user: User = Depends(get_current_user), db: Session = Depends(get_db)
 ):
     """Fetch a single chunk — used by the citation viewer to show the exact
-    cited passage in its source document."""
+    cited passage. System-library chunks are viewable when cited (citations
+    are the product) even though the library itself is not listed."""
     chunk = db.get(DocumentChunk, chunk_id)
-    if chunk is None or chunk.org_id != user.org_id:
+    if chunk is None or (chunk.org_id is not None and chunk.org_id != user.org_id):
         raise HTTPException(status.HTTP_404_NOT_FOUND, "Citation source not found")
     return chunk
 
@@ -102,7 +127,9 @@ def delete_document(
     db: Session = Depends(get_db),
 ):
     doc = db.get(Document, document_id)
-    if doc is None or doc.org_id != user.org_id:
+    if doc is None or (doc.scope == "system" and user.role != "super_admin") or (
+        doc.scope != "system" and doc.org_id != user.org_id
+    ):
         raise HTTPException(status.HTTP_404_NOT_FOUND, "Document not found")
     try:
         if doc.storage_path and os.path.exists(doc.storage_path):

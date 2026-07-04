@@ -5,6 +5,9 @@ import { useCallback, useEffect, useState } from "react";
 import ArtifactPanel, { type PanelContent } from "@/components/ArtifactPanel";
 import ChatView from "@/components/ChatView";
 import DocumentsView from "@/components/DocumentsView";
+import IntegrationsView from "@/components/IntegrationsView";
+import Onboarding from "@/components/Onboarding";
+import ProfileView from "@/components/ProfileView";
 import Sidebar from "@/components/Sidebar";
 import { api, clearToken, getToken } from "@/lib/api";
 import type { Artifact, Conversation, Source, User } from "@/lib/types";
@@ -14,9 +17,10 @@ export default function Home() {
   const [user, setUser] = useState<User | null>(null);
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
-  const [view, setView] = useState<"chat" | "documents">("chat");
+  const [view, setView] = useState<"chat" | "documents" | "profile" | "integrations">("chat");
   const [panel, setPanel] = useState<PanelContent | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(false);
 
   const refreshConversations = useCallback(() => {
     api<Conversation[]>("/api/conversations").then(setConversations).catch(() => {});
@@ -30,6 +34,10 @@ export default function Home() {
     api<User>("/api/auth/me")
       .then((u) => {
         setUser(u);
+        // First visit: offer the niche-profile onboarding (always skippable).
+        if (u.onboarding_status === "pending" && u.role !== "student") {
+          setShowOnboarding(true);
+        }
         refreshConversations();
       })
       .catch(() => {
@@ -45,6 +53,19 @@ export default function Home() {
           B
         </div>
       </main>
+    );
+  }
+
+  if (showOnboarding) {
+    return (
+      <Onboarding
+        user={user}
+        onDone={(status) => {
+          setShowOnboarding(false);
+          setUser({ ...user, onboarding_status: status });
+          if (status === "completed") setView("profile");
+        }}
+      />
     );
   }
 
@@ -86,8 +107,8 @@ export default function Home() {
         onNewChat={newChat}
         onSelectConversation={selectConversation}
         onDeleteConversation={(id) => void deleteConversation(id)}
-        onOpenDocuments={() => {
-          setView("documents");
+        onOpenView={(v) => {
+          setView(v);
           setPanel(null);
           setSidebarOpen(false);
         }}
@@ -109,7 +130,7 @@ export default function Home() {
         </div>
 
         <div className="flex min-h-0 flex-1">
-          {view === "chat" ? (
+          {view === "chat" && (
             <ChatView
               user={user}
               conversationId={activeId}
@@ -121,9 +142,10 @@ export default function Home() {
               onOpenCitation={(source: Source) => setPanel({ type: "citation", source })}
               onOpenArtifact={(artifact: Artifact) => setPanel({ type: "artifact", artifact })}
             />
-          ) : (
-            <DocumentsView user={user} />
           )}
+          {view === "documents" && <DocumentsView user={user} />}
+          {view === "profile" && <ProfileView onRedo={() => setShowOnboarding(true)} />}
+          {view === "integrations" && <IntegrationsView />}
           {panel && <ArtifactPanel content={panel} onClose={() => setPanel(null)} />}
         </div>
       </main>

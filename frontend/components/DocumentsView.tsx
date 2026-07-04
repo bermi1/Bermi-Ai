@@ -14,12 +14,15 @@ export default function DocumentsView({ user }: { user: User }) {
   const [docs, setDocs] = useState<Doc[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
+  // Super admins can switch to the private, system-wide policy library.
+  const [scope, setScope] = useState<"org" | "system">("org");
   const fileRef = useRef<HTMLInputElement>(null);
   const canUpload = user.role !== "student";
+  const isSuper = user.role === "super_admin";
 
   const refresh = useCallback(() => {
-    api<Doc[]>("/api/documents").then(setDocs).catch((e) => setError(e.message));
-  }, []);
+    api<Doc[]>(`/api/documents?scope=${scope}`).then(setDocs).catch((e) => setError(e.message));
+  }, [scope]);
 
   useEffect(() => {
     refresh();
@@ -40,6 +43,7 @@ export default function DocumentsView({ user }: { user: User }) {
       for (const file of Array.from(files)) {
         const form = new FormData();
         form.append("file", file);
+        form.append("scope", scope);
         await api<Doc>("/api/documents", { method: "POST", body: form });
       }
       refresh();
@@ -65,10 +69,38 @@ export default function DocumentsView({ user }: { user: User }) {
     <div className="mx-auto w-full max-w-3xl flex-1 overflow-y-auto px-4 py-8">
       <h1 className="font-serif text-2xl font-semibold">Knowledge base</h1>
       <p className="mt-1 text-sm text-stone-500 dark:text-stone-400">
-        Documents uploaded here ground Bermi AI&apos;s answers for everyone in{" "}
-        <span className="font-medium">{user.organization?.name}</span>. Answers drawn from
-        them include precise citations.
+        {scope === "org" ? (
+          <>
+            Documents uploaded here ground Bermi AI&apos;s answers for everyone in{" "}
+            <span className="font-medium">{user.organization?.name}</span>. Answers drawn
+            from them include precise citations.
+          </>
+        ) : (
+          <>
+            The <span className="font-medium">private policy library</span> — strategic
+            documents (e.g. Tanzania Vision 2050, regulatory guidance) that inform answers
+            for <em>every</em> organisation with citations, but are never listed publicly.
+          </>
+        )}
       </p>
+      {isSuper && (
+        <div className="mt-4 flex gap-1 rounded-xl bg-stone-200/70 p-1 dark:bg-stone-800 max-w-md">
+          {(["org", "system"] as const).map((s) => (
+            <button
+              key={s}
+              type="button"
+              onClick={() => setScope(s)}
+              className={`flex-1 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+                scope === s
+                  ? "bg-white text-stone-900 shadow-sm dark:bg-stone-700 dark:text-stone-100"
+                  : "text-stone-500 hover:text-stone-700 dark:text-stone-400"
+              }`}
+            >
+              {s === "org" ? "Organisation" : "🔒 Policy library"}
+            </button>
+          ))}
+        </div>
+      )}
 
       {canUpload ? (
         <label

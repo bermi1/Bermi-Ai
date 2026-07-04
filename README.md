@@ -28,6 +28,20 @@ This repository contains the Phase 1 MVP described in the Bermi AI build specifi
   streaming so every flow remains testable.
 - **Installable PWA** — web manifest, icons, and an offline-shell service worker; users can
   "Install Bermi AI" to their desktop or phone home screen.
+- **Niche-profile onboarding** — a skippable guided interview on first sign-in: Bermi AI asks
+  what the user does, studies, and wants to achieve, then writes a personal profile document
+  and identifies their niche. The profile is injected into every subsequent chat and generated
+  document, so answers are personalised to the individual. Redo anytime from "My niche".
+- **Private policy library** — a system-wide knowledge scope (e.g. Tanzania Development Vision
+  2050, sector strategies, regulatory guidance) that informs answers for *every* organisation
+  with precise citations, but is never listed in any organisation's knowledge base. Managed
+  only by super admins (emails in `SUPER_ADMIN_EMAILS`), or seeded in bulk with
+  `backend/scripts/seed_system_docs.py`.
+- **Bermi AI v1 identity** — the assistant always identifies as the Bermi AI v1 model built by
+  Bemri Tech Company and never reveals third-party providers, regardless of what runs
+  underneath (`MODEL_DISPLAY_NAME`).
+- **Integrations framework** — groundwork for Bermi AI beyond chat; Google Calendar activates
+  once `GOOGLE_CLIENT_ID`/`GOOGLE_CLIENT_SECRET` OAuth credentials are configured.
 
 ## Architecture
 
@@ -84,6 +98,13 @@ All settings are environment variables — see `.env.example`. The important one
 | `EMBEDDINGS_MODEL` | Multilingual embedding model (e.g. `baai/bge-m3` — handles Swahili). |
 | `EMBEDDINGS_DIMENSIONS` | Vector dimension; must match the embedding model (default 1024). |
 | `JWT_SECRET` | Auth token secret — set a real one in production. |
+| `MODEL_DISPLAY_NAME` | Public model identity (default "Bermi AI v1"). |
+| `SUPER_ADMIN_EMAILS` | Comma-separated emails promoted to super admin on sign-in. |
+| `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | Google Cloud OAuth credentials for the Calendar integration. |
+
+**Never commit API keys.** `LLM_API_KEY` belongs in the deployment environment or a local
+`.env` (which is gitignored) — a key that has been shared in chat or committed should be
+rotated at the provider.
 
 Changing `EMBEDDINGS_DIMENSIONS` after documents have been ingested requires re-creating the
 `document_chunks` table (the pgvector column has a fixed dimension).
