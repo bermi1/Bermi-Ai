@@ -5,7 +5,18 @@ from .config import get_settings
 
 settings = get_settings()
 
-engine = create_engine(settings.database_url, pool_pre_ping=True)
+
+def _normalize_db_url(url: str) -> str:
+    """Hosting providers (Render, Railway, Heroku) hand out postgres:// or
+    postgresql:// URLs; SQLAlchemy needs the psycopg driver spelled out."""
+    if url.startswith("postgres://"):
+        return url.replace("postgres://", "postgresql+psycopg://", 1)
+    if url.startswith("postgresql://"):
+        return url.replace("postgresql://", "postgresql+psycopg://", 1)
+    return url
+
+
+engine = create_engine(_normalize_db_url(settings.database_url), pool_pre_ping=True)
 SessionLocal = sessionmaker(bind=engine, autoflush=False, expire_on_commit=False)
 
 

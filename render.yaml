@@ -1,0 +1,40 @@
+# Render Blueprint — deploys the Bermi AI backend + Postgres (with pgvector).
+# In the Render dashboard: New → Blueprint → point at this repository.
+# After the first deploy, set LLM_API_KEY and CORS_ORIGINS in the service's
+# Environment tab (CORS_ORIGINS = your Vercel frontend URL).
+
+services:
+  - type: web
+    name: bermi-ai-backend
+    runtime: python
+    rootDir: backend
+    plan: starter
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    disk:
+      name: bermi-uploads
+      mountPath: /data/uploads
+      sizeGB: 1
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: bermi-ai-db
+          property: connectionString
+      - key: UPLOAD_DIR
+        value: /data/uploads
+      - key: JWT_SECRET
+        generateValue: true
+      - key: MODEL_DISPLAY_NAME
+        value: Bermi AI v1
+      - key: LLM_API_KEY
+        sync: false # set manually in the dashboard — never commit keys
+      - key: CORS_ORIGINS
+        sync: false # set to your Vercel URL, e.g. https://bermi-ai.vercel.app
+      - key: SUPER_ADMIN_EMAILS
+        sync: false
+
+databases:
+  - name: bermi-ai-db
+    plan: basic-256mb
+    postgresMajorVersion: "16"
