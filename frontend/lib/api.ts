@@ -1,4 +1,20 @@
-export const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+// Production backend default — overridden by NEXT_PUBLIC_API_URL at build time.
+const PROD_API_URL = "https://bermi-ai-backend.onrender.com";
+const LOCAL_API_URL = "http://localhost:8000";
+
+function resolveApiUrl(): string {
+  const configured = process.env.NEXT_PUBLIC_API_URL;
+  if (configured && configured !== LOCAL_API_URL) return configured;
+  if (
+    typeof window !== "undefined" &&
+    !["localhost", "127.0.0.1"].includes(window.location.hostname)
+  ) {
+    return PROD_API_URL;
+  }
+  return LOCAL_API_URL;
+}
+
+export const API_URL = resolveApiUrl();
 
 const TOKEN_KEY = "bermi_token";
 
