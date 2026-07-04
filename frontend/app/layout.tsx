@@ -7,7 +7,10 @@ export const metadata: Metadata = {
     "The AI operating system for Tanzanian institutions, students, and professionals — grounded in your documents, with precise citations.",
   manifest: "/manifest.webmanifest",
   appleWebApp: { capable: true, statusBarStyle: "default", title: "Bermi AI" },
-  icons: { icon: "/icon.svg" },
+  icons: {
+    icon: [{ url: "/favicon.ico", sizes: "any" }, { url: "/icon.svg", type: "image/svg+xml" }],
+    apple: "/icon-192.png",
+  },
 };
 
 export const viewport: Viewport = {
