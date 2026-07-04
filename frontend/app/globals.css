@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-surface-light text-stone-800 antialiased dark:bg-surface-dark dark:text-stone-200;
+  }
+  ::selection {
+    @apply bg-accent-soft text-stone-900 dark:bg-accent-softdark dark:text-stone-100;
+  }
+}
+
+@layer components {
+  .btn-accent {
+    @apply rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-ghost {
+    @apply rounded-lg px-3 py-2 text-sm text-stone-600 transition-colors hover:bg-stone-200/60 dark:text-stone-300 dark:hover:bg-stone-700/50;
+  }
+  .input-base {
+    @apply w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm outline-none transition-colors placeholder:text-stone-400 focus:border-accent dark:border-stone-600 dark:bg-surface-paneldark dark:text-stone-100;
+  }
+}
+
+/* Markdown content inside chat bubbles and the artifact panel */
+.prose-bermi {
+  @apply text-[15px] leading-relaxed;
+}
+.prose-bermi h1 {
+  @apply mb-3 mt-5 font-serif text-2xl font-semibold first:mt-0;
+}
+.prose-bermi h2 {
+  @apply mb-2 mt-5 font-serif text-xl font-semibold first:mt-0;
+}
+.prose-bermi h3 {
+  @apply mb-2 mt-4 text-base font-semibold first:mt-0;
+}
+.prose-bermi p {
+  @apply mb-3 last:mb-0;
+}
+.prose-bermi ul {
+  @apply mb-3 list-disc space-y-1 pl-5;
+}
+.prose-bermi ol {
+  @apply mb-3 list-decimal space-y-1 pl-5;
+}
+.prose-bermi code {
+  @apply rounded bg-stone-200/70 px-1 py-0.5 text-[13px] dark:bg-stone-700/70;
+}
+.prose-bermi pre {
+  @apply mb-3 overflow-x-auto rounded-lg bg-stone-900 p-3 text-stone-100;
+}
+.prose-bermi pre code {
+  @apply bg-transparent p-0;
+}
+.prose-bermi table {
+  @apply mb-3 w-full border-collapse text-sm;
+}
+.prose-bermi th,
+.prose-bermi td {
+  @apply border border-stone-300 px-2 py-1 text-left dark:border-stone-600;
+}
+.prose-bermi blockquote {
+  @apply mb-3 border-l-4 border-accent/50 pl-3 italic text-stone-600 dark:text-stone-400;
+}
+.prose-bermi a {
+  @apply text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent;
+}
+
+/* Citation chips rendered from [n] markers */
+.citation-chip {
+  @apply mx-0.5 inline-flex h-[18px] min-w-[18px] cursor-pointer items-center justify-center rounded-full bg-accent-soft px-1 align-text-top text-[11px] font-semibold text-accent no-underline transition-colors hover:bg-accent hover:text-white dark:bg-accent-softdark;
+}
+
+/* Streaming caret */
+.streaming-caret::after {
+  content: "▍";
+  @apply ml-0.5 animate-pulse text-accent;
+}
