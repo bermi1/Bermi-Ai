@@ -9,20 +9,21 @@ __pycache__/
 .ruff_cache/
 
 # Builds
-frontend/.next/
-frontend/out/
+.next/
+out/
 dist/
 build/
 *.egg-info/
 
 # Environment
 .env
+api/.env
 .env.local
 .env.*.local
 
 # Uploads / local data
-backend/uploads/
-backend/storage/
+uploads/
+api/uploads/
 *.db
 *.sqlite3
 

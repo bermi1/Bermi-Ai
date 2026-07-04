@@ -4,7 +4,11 @@ ARG NEXT_PUBLIC_API_URL=http://localhost:8000
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 COPY package.json package-lock.json* ./
 RUN npm install
-COPY . .
+COPY next.config.mjs postcss.config.mjs tailwind.config.ts tsconfig.json next-env.d.ts ./
+COPY app ./app
+COPY components ./components
+COPY lib ./lib
+COPY public ./public
 RUN npm run build
 
 FROM node:22-alpine

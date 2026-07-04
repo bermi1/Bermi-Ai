@@ -1,5 +1,6 @@
-// Production backend default — overridden by NEXT_PUBLIC_API_URL at build time.
-const PROD_API_URL = "https://bermi-ai-backend.onrender.com";
+// In production the backend is served from the same origin (/api/* routes to
+// the FastAPI function). In local dev the backend runs on :8000.
+// NEXT_PUBLIC_API_URL overrides both when set to a non-default value.
 const LOCAL_API_URL = "http://localhost:8000";
 
 function resolveApiUrl(): string {
@@ -9,7 +10,7 @@ function resolveApiUrl(): string {
     typeof window !== "undefined" &&
     !["localhost", "127.0.0.1"].includes(window.location.hostname)
   ) {
-    return PROD_API_URL;
+    return ""; // same origin
   }
   return LOCAL_API_URL;
 }

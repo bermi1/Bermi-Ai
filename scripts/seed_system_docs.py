@@ -17,7 +17,7 @@ import shutil
 import sys
 import uuid
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "api"))
 
 from app.config import get_settings  # noqa: E402
 from app.database import db_session, init_db  # noqa: E402

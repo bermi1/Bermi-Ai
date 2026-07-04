@@ -1,3 +1,4 @@
+import os
 from functools import lru_cache
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -38,7 +39,8 @@ class Settings(BaseSettings):
     embeddings_dimensions: int = 1024
 
     # Storage
-    upload_dir: str = "./uploads"
+    # On Vercel the filesystem is read-only except /tmp.
+    upload_dir: str = "/tmp/uploads" if os.environ.get("VERCEL") else "./uploads"
 
     # CORS
     cors_origins: str = "http://localhost:3000"

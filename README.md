@@ -36,7 +36,7 @@ This repository contains the Phase 1 MVP described in the Bermi AI build specifi
   2050, sector strategies, regulatory guidance) that informs answers for *every* organisation
   with precise citations, but is never listed in any organisation's knowledge base. Managed
   only by super admins (emails in `SUPER_ADMIN_EMAILS`), or seeded in bulk with
-  `backend/scripts/seed_system_docs.py`.
+  `scripts/seed_system_docs.py`.
 - **Bermi AI v1 identity** — the assistant always identifies as the Bermi AI v1 model built by
   Bemri Tech Company and never reveals third-party providers, regardless of what runs
   underneath (`MODEL_DISPLAY_NAME`).
@@ -46,10 +46,14 @@ This repository contains the Phase 1 MVP described in the Bermi AI build specifi
 ## Architecture
 
 ```
-frontend/   Next.js 14 + React + TypeScript + Tailwind (PWA)
-backend/    FastAPI (Python) — auth, chat streaming (SSE), RAG, ingestion, docgen
-            PostgreSQL + pgvector — users, orgs, conversations, chunks + embeddings
+/           Next.js 14 + React + TypeScript + Tailwind (PWA frontend)
+api/        FastAPI (Python) — auth, chat streaming (SSE), RAG, ingestion, docgen
+            Deployed as a Vercel Python function; /api/* routes hit FastAPI
+            PostgreSQL + pgvector (Supabase) — users, orgs, chunks + embeddings
 ```
+
+Production runs entirely on **Vercel (frontend + backend together) + Supabase
+(database)** — see `DEPLOYMENT.md`.
 
 ## Quick start (Docker)
 
@@ -72,13 +76,11 @@ createdb bermi_ai -O bermi
 psql bermi_ai -c "CREATE EXTENSION vector"
 
 # Backend
-cd backend
 python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
-DATABASE_URL=postgresql+psycopg://bermi:bermi@localhost:5432/bermi_ai \
-  .venv/bin/uvicorn app.main:app --reload --port 8000
+cd api && DATABASE_URL=postgresql+psycopg://bermi:bermi@localhost:5432/bermi_ai \
+  ../.venv/bin/uvicorn app.main:app --reload --port 8000
 
-# Frontend
-cd frontend
+# Frontend (repo root)
 npm install
 npm run dev                    # http://localhost:3000
 ```
@@ -113,14 +115,14 @@ Changing `EMBEDDINGS_DIMENSIONS` after documents have been ingested requires re-
 
 | Spec item | Where |
 |---|---|
-| Model router | `backend/app/services/model_router.py` |
-| Structure-aware chunking | `backend/app/services/ingestion.py` |
-| Org-scoped retrieval + citation context | `backend/app/services/rag.py` |
-| System prompts / restricted student mode | `backend/app/services/prompts.py` |
-| 6-part proposal structure + .docx output | `backend/app/services/docgen.py`, `routers/generate.py` |
-| Streaming chat (SSE) | `backend/app/routers/chat.py`, `frontend/lib/api.ts` |
-| Artifact panel & citation viewer | `frontend/components/ArtifactPanel.tsx` |
-| PWA shell | `frontend/public/manifest.webmanifest`, `frontend/public/sw.js` |
+| Model router | `api/app/services/model_router.py` |
+| Structure-aware chunking | `api/app/services/ingestion.py` |
+| Org-scoped retrieval + citation context | `api/app/services/rag.py` |
+| System prompts / restricted student mode | `api/app/services/prompts.py` |
+| 6-part proposal structure + .docx output | `api/app/services/docgen.py`, `routers/generate.py` |
+| Streaming chat (SSE) | `api/app/routers/chat.py`, `lib/api.ts` |
+| Artifact panel & citation viewer | `components/ArtifactPanel.tsx` |
+| PWA shell | `public/manifest.webmanifest`, `public/sw.js` |
 
 ## Roadmap (later phases)
 

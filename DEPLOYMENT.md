@@ -1,78 +1,62 @@
-# Deploying Bermi AI (go live — free tier)
+# Deploying Bermi AI (go live — Vercel + Supabase only)
 
-The whole trial stack runs at **$0/month**:
+The entire application runs on two free services:
 
 | Piece | Host | Plan |
 |---|---|---|
 | Database (Postgres + pgvector) | Supabase | Free |
-| Backend (FastAPI) | Render | Free |
-| Frontend (Next.js PWA) | Vercel | Hobby (free) |
+| Frontend + Backend (one deployment) | Vercel | Hobby (free) |
 
-Total setup time: about 15 minutes.
+The Next.js frontend and the FastAPI backend deploy together as a single
+Vercel project: the frontend is served statically and every `/api/*` request
+runs the Python function in `api/index.py`. Same origin, no CORS setup.
 
-## Step 1 — Database on Supabase (free, 5 min)
+## Step 1 — Supabase (database)
 
-1. Go to https://supabase.com → sign in with GitHub → **New project**.
-   - Name: `bermi-ai` · Region: pick the closest (e.g. Frankfurt or Mumbai for Tanzania).
-   - Save the database password you choose — you need it in a moment.
-2. Enable the vector extension: in the project, open **Database → Extensions**,
-   search for `vector`, and switch it on. (The app also runs
-   `CREATE EXTENSION IF NOT EXISTS vector` on startup as a backup.)
-3. Get the connection string: click **Connect** (top bar) → choose
-   **Session pooler** → copy the URI. It looks like:
-   `postgresql://postgres.abcdefgh:[YOUR-PASSWORD]@aws-0-eu-central-1.pooler.supabase.com:5432/postgres`
-   Replace `[YOUR-PASSWORD]` with your database password.
+Already provisioned: project **bermi-ai** (`zhyorwmqyhkawlyowbxe`, eu-central-1)
+with the full schema, pgvector, Row Level Security, and a dedicated backend
+role. If you ever recreate it: create a free project, enable the `vector`
+extension, and run the migrations in order (they are tracked in the project's
+migration history).
 
-   Use the **Session pooler** string (port **5432**) — it works everywhere.
-   (The app also supports the transaction pooler on port 6543 automatically,
-   but session mode is the simplest.)
+## Step 2 — Vercel environment variables
 
-## Step 2 — Backend on Render (free, 5 min)
+In Vercel → project **bermi-ai** → Settings → Environment Variables, add
+(for Production):
 
-1. Go to https://render.com → sign in with GitHub → **New → Blueprint** →
-   select this repository. Render reads `render.yaml` automatically.
-2. When prompted for environment variables, paste:
-   - `DATABASE_URL` — the Supabase connection string from Step 1.
-   - `LLM_API_KEY` — your OpenRouter key (never commit it to the repository).
-   - `SUPER_ADMIN_EMAILS` — your email (this makes you super admin).
-   - `CORS_ORIGINS` — leave blank for now; set it after Step 3.
-3. Deploy, then note the backend URL, e.g. `https://bermi-ai-backend.onrender.com`.
-   Check it's alive: open `<backend-url>/api/health` → `{"status":"ok"}`.
+| Variable | Value |
+|---|---|
+| `DATABASE_URL` | the Supabase Session-pooler URI for the backend role (ask Bermi AI's maintainer, or build it from the dashboard's Connect dialog) |
+| `JWT_SECRET` | a long random string (`python -c "import secrets; print(secrets.token_hex(32))"`) |
+| `LLM_API_KEY` | your OpenRouter API key |
+| `SUPER_ADMIN_EMAILS` | your email — grants super admin on sign-in |
 
-## Step 3 — Frontend on Vercel (free, 5 min)
+Then **Deployments → ⋯ on the latest → Redeploy** so the variables take effect.
 
-1. Go to https://vercel.com → **Add New → Project** → import this repository.
-2. Set **Root Directory** to `frontend` (Next.js is auto-detected).
-3. Add one environment variable:
-   - `NEXT_PUBLIC_API_URL` = your Render backend URL (no trailing slash).
-4. Deploy. Your app is live at `https://<project>.vercel.app`.
+## Step 3 — Verify
 
-## Step 4 — Connect the two
+- `https://<your-app>.vercel.app/api/health` → `{"status":"ok"}`
+- Open `https://<your-app>.vercel.app`, register, and you're live.
 
-1. In Render, set the backend's `CORS_ORIGINS` to your Vercel URL
-   (e.g. `https://bermi-ai.vercel.app`) and let it redeploy.
-2. Open the Vercel URL, register your account — your email in
-   `SUPER_ADMIN_EMAILS` is promoted to super admin on sign-in.
+## Step 4 — Load the private policy library
 
-## Step 5 — Load the private policy library
-
-As super admin, open **Knowledge base → 🔒 Policy library** in the app and upload
+As super admin, open **Knowledge base → 🔒 Policy library** and upload
 Tanzania Development Vision 2050 and other strategic documents — they inform
-answers for every organisation with citations, without being publicly listed.
+answers for every organisation with citations, without being listed publicly.
 
 ## Custom domain
 
-Add your domain (e.g. `ai.bemri.co.tz`) in Vercel → Project → Settings → Domains,
-then update `CORS_ORIGINS` on Render to match.
+Vercel → Project → Settings → Domains → add e.g. `ai.bemri.co.tz`.
 
-## Free-tier limits to know
+## Platform notes
 
-- **Render free** sleeps after ~15 min idle; the first request after that takes
-  ~30 s. It also has no persistent disk: original uploaded files and generated
-  .docx downloads are lost on restart — but everything that matters (accounts,
-  chats, indexed document text, embeddings, citations, profiles) lives in
-  Supabase and is safe. Upgrade to the `starter` plan + a disk to keep files.
-- **Supabase free** gives 500 MB of database storage and pauses projects after
-  ~1 week of no traffic (one click to resume in the dashboard).
-- Keys live only in the hosting dashboards. If a key has ever been shared in
-  chat or committed, rotate it at the provider.
+- **Serverless files are temporary**: original uploads and generated .docx
+  files live in `/tmp` and vanish between invocations — but all indexed
+  document text, embeddings, citations, accounts, chats, and profiles are in
+  Supabase and permanent. Word downloads work right after generation.
+- **Function limits (Hobby)**: 60 s max per request — fine for chat
+  streaming and document uploads of normal size.
+- **Supabase free** pauses after ~1 week of no traffic; one click resumes it.
+- **Local development** still works the classic way:
+  `docker compose up` (full stack), or `uvicorn app.main:app` from `api/`
+  plus `npm run dev` at the root.

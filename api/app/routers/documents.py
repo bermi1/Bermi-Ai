@@ -10,7 +10,7 @@ from ..config import get_settings
 from ..database import get_db
 from ..models import Document, DocumentChunk, User
 from ..schemas import ChunkOut, DocumentOut
-from ..services.ingestion import process_document
+from ..services.ingestion import _process, process_document
 
 router = APIRouter(prefix="/api/documents", tags=["documents"])
 
@@ -68,8 +68,14 @@ async def upload_document(
     db.add(doc)
     db.commit()
 
-    # Ingestion (extract → chunk → embed) runs off the request path.
-    background.add_task(process_document, doc.id, data)
+    if os.environ.get("VERCEL"):
+        # Serverless: background work isn't guaranteed to run after the
+        # response, so ingest synchronously within the request.
+        await _process(doc.id, data)
+        db.refresh(doc)
+    else:
+        # Ingestion (extract → chunk → embed) runs off the request path.
+        background.add_task(process_document, doc.id, data)
     return doc
 
 
