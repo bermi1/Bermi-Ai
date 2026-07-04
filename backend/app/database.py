@@ -1,5 +1,6 @@
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
+from sqlalchemy.pool import NullPool
 
 from .config import get_settings
 
@@ -7,8 +8,9 @@ settings = get_settings()
 
 
 def _normalize_db_url(url: str) -> str:
-    """Hosting providers (Render, Railway, Heroku) hand out postgres:// or
-    postgresql:// URLs; SQLAlchemy needs the psycopg driver spelled out."""
+    """Hosting providers (Supabase, Render, Railway, Heroku) hand out
+    postgres:// or postgresql:// URLs; SQLAlchemy needs the psycopg driver
+    spelled out."""
     if url.startswith("postgres://"):
         return url.replace("postgres://", "postgresql+psycopg://", 1)
     if url.startswith("postgresql://"):
@@ -16,7 +18,18 @@ def _normalize_db_url(url: str) -> str:
     return url
 
 
-engine = create_engine(_normalize_db_url(settings.database_url), pool_pre_ping=True)
+def _engine_kwargs(url: str) -> dict:
+    kwargs: dict = {"pool_pre_ping": True}
+    # Supabase's transaction-mode pooler (port 6543) is PgBouncer-style:
+    # server-side prepared statements and client pooling must be disabled.
+    if ":6543" in url:
+        kwargs["poolclass"] = NullPool
+        kwargs["connect_args"] = {"prepare_threshold": None}
+    return kwargs
+
+
+_db_url = _normalize_db_url(settings.database_url)
+engine = create_engine(_db_url, **_engine_kwargs(_db_url))
 SessionLocal = sessionmaker(bind=engine, autoflush=False, expire_on_commit=False)
 
 

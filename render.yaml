@@ -1,28 +1,34 @@
-# Render Blueprint — deploys the Bermi AI backend + Postgres (with pgvector).
-# In the Render dashboard: New → Blueprint → point at this repository.
-# After the first deploy, set LLM_API_KEY and CORS_ORIGINS in the service's
-# Environment tab (CORS_ORIGINS = your Vercel frontend URL).
+# Render Blueprint — deploys the Bermi AI backend on the FREE plan, using a
+# free Supabase Postgres database (with pgvector) as storage.
+#
+# 1. Create a free database first: see "Database on Supabase" in DEPLOYMENT.md
+# 2. In the Render dashboard: New → Blueprint → point at this repository.
+# 3. When prompted, paste:
+#      DATABASE_URL       — the Supabase "Session pooler" connection string
+#      LLM_API_KEY        — your OpenRouter key
+#      CORS_ORIGINS       — your Vercel frontend URL (add after Vercel deploy)
+#      SUPER_ADMIN_EMAILS — your email
+#
+# Free-plan notes: the service sleeps after ~15 min idle (first request then
+# takes ~30 s) and has no persistent disk, so original uploaded files and
+# generated .docx files vanish on restart — chat history, documents' indexed
+# text, embeddings, and citations all live in Supabase and are safe. For
+# always-on + persistent files, switch plan to "starter" and add a disk.
 
 services:
   - type: web
     name: bermi-ai-backend
     runtime: python
     rootDir: backend
-    plan: starter
+    plan: free
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /api/health
-    disk:
-      name: bermi-uploads
-      mountPath: /data/uploads
-      sizeGB: 1
     envVars:
       - key: DATABASE_URL
-        fromDatabase:
-          name: bermi-ai-db
-          property: connectionString
+        sync: false # Supabase Session-pooler URL — set in the dashboard
       - key: UPLOAD_DIR
-        value: /data/uploads
+        value: /tmp/uploads
       - key: JWT_SECRET
         generateValue: true
       - key: MODEL_DISPLAY_NAME
@@ -33,8 +39,3 @@ services:
         sync: false # set to your Vercel URL, e.g. https://bermi-ai.vercel.app
       - key: SUPER_ADMIN_EMAILS
         sync: false
-
-databases:
-  - name: bermi-ai-db
-    plan: basic-256mb
-    postgresMajorVersion: "16"
