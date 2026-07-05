@@ -39,7 +39,7 @@ class UserOut(BaseModel):
     email: str
     name: str
     role: str
-    org_id: str
+    org_id: str | None = None
     organization: OrganizationOut | None = None
     onboarding_status: str = "pending"  # pending|completed|skipped
 
@@ -90,6 +90,10 @@ class ChatRequest(BaseModel):
     conversation_id: str | None = None
     content: str = Field(min_length=1)
     mode: str = "general"
+
+
+class DemoChatRequest(BaseModel):
+    content: str = Field(min_length=1, max_length=2000)
 
 
 # ── Onboarding / profile ──────────────────────────────────────────────

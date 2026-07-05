@@ -37,7 +37,7 @@ async def chat(body: ChatRequest, user: User = Depends(get_current_user)):
     try:
         if body.conversation_id:
             conv = db.get(Conversation, body.conversation_id)
-            if conv is None or conv.org_id != user.org_id or conv.user_id != user.id:
+            if conv is None or conv.user_id != user.id:
                 raise HTTPException(status.HTTP_404_NOT_FOUND, "Conversation not found")
         else:
             conv = Conversation(
@@ -77,17 +77,16 @@ async def chat(body: ChatRequest, user: User = Depends(get_current_user)):
         db.close()
 
     restricted = is_restricted(user)
-    org_id = user.org_id
 
     async def event_stream():
         yield _sse("meta", {"conversation_id": conversation_id, "user_message_id": user_message_id})
 
-        # Retrieval (org-scoped, always).
+        # Retrieval (scoped to the user / their organisation, always).
         db = db_session()
         try:
             # Students query only their organisation's materials; everyone
             # else also draws on the system-wide policy library.
-            sources = await retrieve(db, org_id, body.content, include_system=not restricted)
+            sources = await retrieve(db, user, body.content, include_system=not restricted)
         except Exception as exc:
             sources = []
             yield _sse("warning", {"message": f"Knowledge base retrieval failed: {exc}"})

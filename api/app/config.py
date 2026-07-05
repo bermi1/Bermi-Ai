@@ -50,6 +50,19 @@ class Settings(BaseSettings):
     chunk_size: int = 1400
     chunk_overlap: int = 200
 
+    # Public demo chat — messages a guest may send per IP per day.
+    demo_daily_limit: int = 6
+
+    # Email (branded verification / reset). When SMTP is unset, email sending
+    # is disabled and accounts are active immediately (login is never gated).
+    require_email_verification: bool = False
+    smtp_host: str = ""
+    smtp_port: int = 587
+    smtp_user: str = ""
+    smtp_password: str = ""
+    email_from: str = "Bermi AI <no-reply@bermitechs.com>"
+    app_base_url: str = "http://localhost:3000"
+
     @property
     def cors_origin_list(self) -> list[str]:
         return [o.strip() for o in self.cors_origins.split(",") if o.strip()]

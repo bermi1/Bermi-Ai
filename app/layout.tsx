@@ -2,9 +2,10 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Bermi AI",
+  title: "Bermi AI — Intelligence that speaks your language",
   description:
-    "The AI operating system for Tanzanian institutions, students, and professionals — grounded in your documents, with precise citations.",
+    "Africa-first AI assistant. Answers grounded in your documents with real citations, "
+    + "ready-to-submit writing, and fluent English & Swahili. Free to start — no organisation needed.",
   manifest: "/manifest.webmanifest",
   appleWebApp: { capable: true, statusBarStyle: "default", title: "Bermi AI" },
   icons: {

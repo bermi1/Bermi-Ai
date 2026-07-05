@@ -20,6 +20,15 @@ router = APIRouter(prefix="/api", tags=["generate"])
 KIND_LABELS = {"proposal": "proposal", "letter": "letter", "report": "report"}
 
 
+def _can_access_artifact(artifact: Artifact | None, user: User) -> bool:
+    if artifact is None:
+        return False
+    if user.org_id is not None:
+        return artifact.org_id == user.org_id
+    # Solo users: artifacts are private to their creator (both org_id NULL).
+    return artifact.user_id == user.id
+
+
 def _artifact_out(a: Artifact) -> ArtifactOut:
     return ArtifactOut(
         id=a.id,
@@ -51,7 +60,7 @@ async def generate_document(
     sources = []
     if body.use_knowledge_base:
         try:
-            sources = await retrieve(db, user.org_id, body.brief)
+            sources = await retrieve(db, user, body.brief)
             context_block = build_context_block(sources)
         except Exception:
             context_block = None  # generation still works without retrieval
@@ -119,7 +128,7 @@ def get_artifact(
     artifact_id: str, user: User = Depends(get_current_user), db: Session = Depends(get_db)
 ):
     artifact = db.get(Artifact, artifact_id)
-    if artifact is None or artifact.org_id != user.org_id:
+    if not _can_access_artifact(artifact, user):
         raise HTTPException(status.HTTP_404_NOT_FOUND, "Artifact not found")
     return _artifact_out(artifact)
 
@@ -129,7 +138,7 @@ def download_artifact(
     artifact_id: str, user: User = Depends(get_current_user), db: Session = Depends(get_db)
 ):
     artifact = db.get(Artifact, artifact_id)
-    if artifact is None or artifact.org_id != user.org_id:
+    if not _can_access_artifact(artifact, user):
         raise HTTPException(status.HTTP_404_NOT_FOUND, "Artifact not found")
     if not artifact.docx_path or not os.path.exists(artifact.docx_path):
         raise HTTPException(status.HTTP_404_NOT_FOUND, "No Word file available for this artifact")

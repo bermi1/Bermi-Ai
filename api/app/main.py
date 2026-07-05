@@ -5,7 +5,16 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from .config import get_settings
 from .database import init_db
-from .routers import auth, chat, conversations, documents, generate, integrations, onboarding
+from .routers import (
+    auth,
+    chat,
+    conversations,
+    demo,
+    documents,
+    generate,
+    integrations,
+    onboarding,
+)
 
 settings = get_settings()
 
@@ -35,6 +44,7 @@ app.add_middleware(
 app.include_router(auth.router)
 app.include_router(conversations.router)
 app.include_router(chat.router)
+app.include_router(demo.router)
 app.include_router(documents.router)
 app.include_router(generate.router)
 app.include_router(onboarding.router)

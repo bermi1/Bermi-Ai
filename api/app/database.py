@@ -61,8 +61,16 @@ def init_db() -> None:
             "ALTER TABLE documents ADD COLUMN IF NOT EXISTS scope VARCHAR(16) DEFAULT 'org' NOT NULL",
             "ALTER TABLE documents ALTER COLUMN org_id DROP NOT NULL",
             "ALTER TABLE document_chunks ALTER COLUMN org_id DROP NOT NULL",
+            # Organisations are now optional on accounts and their content.
+            "ALTER TABLE users ALTER COLUMN org_id DROP NOT NULL",
+            "ALTER TABLE users ADD COLUMN IF NOT EXISTS email_verified BOOLEAN DEFAULT TRUE NOT NULL",
+            "ALTER TABLE conversations ALTER COLUMN org_id DROP NOT NULL",
+            "ALTER TABLE artifacts ALTER COLUMN org_id DROP NOT NULL",
         ):
-            conn.execute(text(ddl))
+            try:
+                conn.execute(text(ddl))
+            except Exception:
+                conn.rollback()
         conn.commit()
 
 

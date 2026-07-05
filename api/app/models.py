@@ -5,12 +5,15 @@ from pgvector.sqlalchemy import Vector
 from sqlalchemy import (
     JSON,
     BigInteger,
+    Boolean,
+    Date,
     DateTime,
     ForeignKey,
     Identity,
     Integer,
     String,
     Text,
+    UniqueConstraint,
     func,
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -41,21 +44,28 @@ class User(Base):
     __tablename__ = "users"
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid)
-    org_id: Mapped[str] = mapped_column(ForeignKey("organizations.id"), index=True)
+    # org_id is NULL for individual accounts — organisations are optional.
+    org_id: Mapped[str | None] = mapped_column(
+        ForeignKey("organizations.id"), index=True, nullable=True
+    )
     email: Mapped[str] = mapped_column(String(255), unique=True, index=True)
     name: Mapped[str] = mapped_column(String(255))
     password_hash: Mapped[str] = mapped_column(String(255))
-    role: Mapped[str] = mapped_column(String(32), default="org_admin")  # student|teacher|org_admin|super_admin
+    # individual|student|teacher|org_admin|super_admin
+    role: Mapped[str] = mapped_column(String(32), default="individual")
+    email_verified: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
-    organization: Mapped[Organization] = relationship(back_populates="users")
+    organization: Mapped[Organization | None] = relationship(back_populates="users")
 
 
 class Conversation(Base):
     __tablename__ = "conversations"
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid)
-    org_id: Mapped[str] = mapped_column(ForeignKey("organizations.id"), index=True)
+    org_id: Mapped[str | None] = mapped_column(
+        ForeignKey("organizations.id"), index=True, nullable=True
+    )
     user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), index=True)
     title: Mapped[str] = mapped_column(String(255), default="New conversation")
     mode: Mapped[str] = mapped_column(String(32), default="general")
@@ -153,11 +163,47 @@ class UserProfile(Base):
     )
 
 
+class DemoUsage(Base):
+    """Per-IP daily counter for the public, no-login demo chat (rate limiting).
+
+    DB-backed rather than in-memory so the limit holds across stateless
+    serverless invocations.
+    """
+
+    __tablename__ = "demo_usage"
+    __table_args__ = (UniqueConstraint("ip", "day", name="demo_usage_ip_day_key"),)
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid)
+    ip: Mapped[str] = mapped_column(String(64), index=True)
+    day: Mapped["datetime"] = mapped_column(Date)
+    count: Mapped[int] = mapped_column(Integer, default=0)
+
+
+class EmailVerificationToken(Base):
+    """One-time token for branded email verification / password reset.
+
+    Only used when SMTP is configured (see EmailSettings). Login is never
+    gated on verification unless REQUIRE_EMAIL_VERIFICATION is enabled.
+    """
+
+    __tablename__ = "email_verification_tokens"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid)
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    token: Mapped[str] = mapped_column(String(64), unique=True, index=True)
+    purpose: Mapped[str] = mapped_column(String(16), default="verify")  # verify|reset
+    used: Mapped[bool] = mapped_column(Boolean, default=False)
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
 class Artifact(Base):
     __tablename__ = "artifacts"
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid)
-    org_id: Mapped[str] = mapped_column(ForeignKey("organizations.id"), index=True)
+    org_id: Mapped[str | None] = mapped_column(
+        ForeignKey("organizations.id"), index=True, nullable=True
+    )
     user_id: Mapped[str] = mapped_column(ForeignKey("users.id"))
     conversation_id: Mapped[str | None] = mapped_column(String(36), nullable=True)
     title: Mapped[str] = mapped_column(String(255))

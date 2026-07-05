@@ -66,5 +66,11 @@ def require_roles(*roles: str):
 
 
 def is_restricted(user: User) -> bool:
-    """Students are restricted to their organization's knowledge base only."""
+    """Students are restricted to their organization's knowledge base only.
+    Individuals and all other roles have full access."""
     return user.role == "student"
+
+
+# Roles allowed to upload documents (students cannot; individuals can, to
+# their own private knowledge base).
+UPLOADER_ROLES = ("individual", "teacher", "org_admin", "super_admin")

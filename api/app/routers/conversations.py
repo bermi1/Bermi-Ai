@@ -11,8 +11,9 @@ router = APIRouter(prefix="/api/conversations", tags=["conversations"])
 
 
 def get_owned_conversation(conversation_id: str, user: User, db: Session) -> Conversation:
+    # Conversations are private to the user who created them.
     conv = db.get(Conversation, conversation_id)
-    if conv is None or conv.org_id != user.org_id or conv.user_id != user.id:
+    if conv is None or conv.user_id != user.id:
         raise HTTPException(status.HTTP_404_NOT_FOUND, "Conversation not found")
     return conv
 
@@ -21,7 +22,7 @@ def get_owned_conversation(conversation_id: str, user: User, db: Session) -> Con
 def list_conversations(user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     stmt = (
         select(Conversation)
-        .where(Conversation.user_id == user.id, Conversation.org_id == user.org_id)
+        .where(Conversation.user_id == user.id)
         .order_by(Conversation.updated_at.desc())
         .limit(100)
     )

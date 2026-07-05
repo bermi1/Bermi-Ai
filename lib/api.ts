@@ -155,3 +155,71 @@ export async function streamChat(
   }
   if (buffer.trim()) dispatch(buffer);
 }
+
+export interface DemoCallbacks {
+  onMeta?: (data: { remaining: number; limit: number }) => void;
+  onDelta?: (text: string) => void;
+  onDone?: (data: { remaining: number }) => void;
+  onError?: (message: string) => void;
+  onLimit?: (data: { detail: string; limit: number }) => void;
+}
+
+/** Public demo chat (no auth). Streams SSE; handles the 429 limit case. */
+export async function streamDemoChat(content: string, callbacks: DemoCallbacks): Promise<void> {
+  const resp = await fetch(`${API_URL}/api/demo/chat`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ content }),
+  });
+
+  if (resp.status === 429) {
+    const data = await resp.json().catch(() => ({ detail: "Demo limit reached.", limit: 0 }));
+    callbacks.onLimit?.(data);
+    return;
+  }
+  if (!resp.ok || !resp.body) {
+    callbacks.onError?.(`Demo unavailable (${resp.status}). Please try again.`);
+    return;
+  }
+
+  const reader = resp.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = "";
+
+  const dispatch = (block: string) => {
+    let event = "message";
+    let data = "";
+    for (const line of block.split("\n")) {
+      if (line.startsWith("event:")) event = line.slice(6).trim();
+      else if (line.startsWith("data:")) data += line.slice(5).trim();
+    }
+    if (!data) return;
+    let parsed: any;
+    try {
+      parsed = JSON.parse(data);
+    } catch {
+      return;
+    }
+    if (event === "meta") callbacks.onMeta?.(parsed);
+    else if (event === "delta") callbacks.onDelta?.(parsed.text ?? "");
+    else if (event === "done") callbacks.onDone?.(parsed);
+    else if (event === "error") callbacks.onError?.(parsed.message ?? "Unknown error");
+  };
+
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+    let idx: number;
+    while ((idx = buffer.indexOf("\n\n")) !== -1) {
+      const block = buffer.slice(0, idx);
+      buffer = buffer.slice(idx + 2);
+      if (block.trim()) dispatch(block);
+    }
+  }
+  if (buffer.trim()) dispatch(buffer);
+}
+
+export async function getDemoStatus(): Promise<{ used: number; limit: number; remaining: number }> {
+  return api("/api/demo/status");
+}
