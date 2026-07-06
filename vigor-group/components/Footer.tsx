@@ -1,107 +1,72 @@
 import Link from "next/link";
-import { Mail, MapPin, Phone, Linkedin, Facebook, Instagram } from "lucide-react";
+import { Linkedin, Facebook, Instagram } from "lucide-react";
 import { group, nav } from "@/data/site";
-import { activeSectors, companiesBySector } from "@/data/companies";
 import { Wordmark } from "@/components/Wordmark";
 
+/**
+ * Minimalist footer — wordmark, one line, nav, contact, socials. The full
+ * company directory lives on /companies, not here.
+ */
 export function Footer() {
   return (
-    <footer className="mt-24 border-t border-graphite-900/10 bg-graphite-900 text-graphite-100">
-      <div className="container grid gap-12 py-16 lg:grid-cols-12">
-        <div className="lg:col-span-4">
-          <Wordmark tone="light" />
-          <p className="mt-5 max-w-xs text-sm leading-relaxed text-graphite-100/70">
-            {group.tagline}. A Zanzibari family group of {group.stats.companies} companies
-            across {group.stats.countries} countries.
-          </p>
-          <ul className="mt-6 space-y-2.5 text-sm text-graphite-100/80">
-            <li className="flex items-start gap-2.5">
-              <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-brand-300" strokeWidth={1.6} />
-              <span>
-                {group.hq.street}, {group.hq.city}
-                <br />
-                {group.hq.poBox}, {group.hq.country}
-              </span>
-            </li>
-            <li className="flex items-center gap-2.5">
-              <Mail className="h-4 w-4 shrink-0 text-brand-300" strokeWidth={1.6} />
-              <a href={`mailto:${group.email}`} className="hover:text-white">
-                {group.email}
-              </a>
-            </li>
-            <li className="flex items-center gap-2.5">
-              <Phone className="h-4 w-4 shrink-0 text-brand-300" strokeWidth={1.6} />
-              <a href={`tel:${group.phone.replace(/\s/g, "")}`} className="hover:text-white">
-                {group.phone}
-              </a>
-            </li>
-          </ul>
-          <div className="mt-6 flex gap-3">
-            {[
-              { Icon: Linkedin, label: "LinkedIn" },
-              { Icon: Facebook, label: "Facebook" },
-              { Icon: Instagram, label: "Instagram" },
-            ].map(({ Icon, label }) => (
-              <a
-                key={label}
-                href="#"
-                aria-label={`${group.tradingName} on ${label}`}
-                className="grid h-9 w-9 place-items-center rounded-full border border-white/15 text-graphite-100/80 transition-colors hover:border-brand-300 hover:text-white"
-              >
-                <Icon className="h-4 w-4" strokeWidth={1.6} />
-              </a>
-            ))}
+    <footer className="mt-24 border-t border-graphite-200 bg-white">
+      <div className="container py-14">
+        <div className="flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
+          <div className="max-w-xs">
+            <Wordmark tone="ink" />
+            <p className="mt-4 text-sm leading-relaxed text-graphite-500">
+              {group.tagline}.
+            </p>
+          </div>
+
+          <nav aria-label="Footer">
+            <ul className="flex flex-wrap gap-x-7 gap-y-3 text-sm">
+              {nav.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="text-graphite-600 transition-colors hover:text-graphite-950"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          <div className="flex flex-col items-start gap-4">
+            <a
+              href={`mailto:${group.email}`}
+              className="text-sm font-medium text-graphite-950 underline-offset-4 transition-colors hover:text-brand-600 hover:underline"
+            >
+              {group.email}
+            </a>
+            <div className="flex gap-2">
+              {[
+                { Icon: Linkedin, label: "LinkedIn" },
+                { Icon: Facebook, label: "Facebook" },
+                { Icon: Instagram, label: "Instagram" },
+              ].map(({ Icon, label }) => (
+                <a
+                  key={label}
+                  href="#"
+                  aria-label={`${group.tradingName} on ${label}`}
+                  className="grid h-9 w-9 place-items-center rounded-full text-graphite-400 transition-colors hover:bg-graphite-100 hover:text-graphite-900"
+                >
+                  <Icon className="h-4 w-4" strokeWidth={1.6} />
+                </a>
+              ))}
+            </div>
           </div>
         </div>
 
-        <div className="lg:col-span-3">
-          <h2 className="text-xs font-semibold uppercase tracking-[0.16em] text-brand-300">
-            Explore
-          </h2>
-          <ul className="mt-4 space-y-2.5 text-sm">
-            {nav.map((item) => (
-              <li key={item.href}>
-                <Link href={item.href} className="text-graphite-100/80 hover:text-white">
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div className="lg:col-span-5">
-          <h2 className="text-xs font-semibold uppercase tracking-[0.16em] text-brand-300">
-            Our companies
-          </h2>
-          <div className="mt-4 grid gap-x-8 gap-y-6 sm:grid-cols-2">
-            {activeSectors.map((sector) => (
-              <div key={sector}>
-                <p className="text-sm font-semibold text-white">{sector}</p>
-                <ul className="mt-2 space-y-1.5 text-sm">
-                  {companiesBySector(sector).map((c) => (
-                    <li key={c.slug}>
-                      <Link
-                        href={`/companies/${c.slug}`}
-                        className="text-graphite-100/70 hover:text-white"
-                      >
-                        {c.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div className="border-t border-white/10">
-        <div className="container flex flex-col gap-2 py-6 text-xs text-graphite-100/60 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-12 flex flex-col gap-2 border-t border-graphite-100 pt-6 text-xs text-graphite-400 sm:flex-row sm:items-center sm:justify-between">
           <p>
-            © {new Date().getFullYear()} {group.legalName} (trading as {group.tradingName}).
-            All rights reserved.
+            © {new Date().getFullYear()} {group.legalName}, trading as {group.tradingName}.
           </p>
-          <p>{group.countries.join(" · ")}</p>
+          <p>
+            {group.hq.street}, {group.hq.city} · {group.countries.join(" · ")}
+          </p>
         </div>
       </div>
     </footer>

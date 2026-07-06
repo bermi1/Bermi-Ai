@@ -2,22 +2,29 @@ import { group } from "@/data/site";
 import { CountUp } from "@/components/motion/CountUp";
 import { Reveal } from "@/components/motion/Reveal";
 
-/** Scroll-triggered count-up stats. */
+/**
+ * Scroll-triggered count-up stats — minimal, Apple-style: huge near-black
+ * numerals on white, one red keyline, quiet labels.
+ */
 export function StatsBlock() {
   const stats = [
-    { value: group.stats.companies, suffix: "", label: "Operating companies" },
-    { value: group.stats.employees, suffix: "+", label: "Employees historically" },
-    { value: group.stats.countries, suffix: "", label: "Countries of operation" },
+    { value: group.stats.companies, suffix: "", label: "Companies" },
+    { value: group.stats.sectors, suffix: "", label: "Sectors" },
+    { value: group.stats.employees, suffix: "+", label: "Employees" },
+    { value: group.stats.countries, suffix: "", label: "Countries" },
   ];
   return (
-    <Reveal className="rounded-3xl bg-graphite-900 px-8 py-12 text-white sm:px-12">
-      <dl className="grid gap-8 text-center sm:grid-cols-3">
+    <Reveal>
+      <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-brand-600">
+        Since {group.founded}
+      </p>
+      <dl className="mt-10 grid grid-cols-2 gap-x-6 gap-y-12 lg:grid-cols-4">
         {stats.map((s) => (
-          <div key={s.label}>
-            <dt className="font-heading text-5xl font-semibold text-brand-200">
+          <div key={s.label} className="text-center">
+            <dt className="font-heading text-6xl font-bold tracking-tight text-graphite-950 sm:text-7xl">
               <CountUp value={s.value} suffix={s.suffix} />
             </dt>
-            <dd className="mt-2 text-sm text-graphite-100/75">{s.label}</dd>
+            <dd className="mt-3 text-sm text-graphite-500">{s.label}</dd>
           </div>
         ))}
       </dl>

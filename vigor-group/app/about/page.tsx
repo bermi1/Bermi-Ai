@@ -11,6 +11,7 @@ import { PageHeader } from "@/components/PageHeader";
 import { Timeline } from "@/components/Timeline";
 import { Partners } from "@/components/Partners";
 import { MissionVision } from "@/components/MissionVision";
+import { GlobalPresence } from "@/components/GlobalPresence";
 
 export const metadata = pageMeta({
   title: "About the group",
@@ -135,6 +136,9 @@ export default function AboutPage() {
       <section className="container py-16">
         <StatsBlock />
       </section>
+
+      {/* Global presence */}
+      <GlobalPresence />
 
       {/* Values */}
       <ValuesSection />

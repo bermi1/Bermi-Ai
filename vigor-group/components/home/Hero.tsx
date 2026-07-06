@@ -86,24 +86,6 @@ export function Hero() {
           </ButtonLink>
         </motion.div>
 
-        <motion.dl
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, ease, delay: 0.36 }}
-          className="mt-16 grid max-w-2xl grid-cols-2 gap-8 border-t border-graphite-200 pt-8 sm:grid-cols-4"
-        >
-          {[
-            { n: `${group.stats.companies}`, l: "Companies" },
-            { n: `${group.stats.sectors}`, l: "Sectors" },
-            { n: `${group.stats.employees.toLocaleString()}+`, l: "Employees" },
-            { n: `${group.stats.countries}`, l: "Countries" },
-          ].map((s) => (
-            <div key={s.l}>
-              <dt className="font-heading text-4xl font-bold text-graphite-950">{s.n}</dt>
-              <dd className="mt-1 text-sm text-graphite-500">{s.l}</dd>
-            </div>
-          ))}
-        </motion.dl>
       </div>
 
       {/* company marquee */}
