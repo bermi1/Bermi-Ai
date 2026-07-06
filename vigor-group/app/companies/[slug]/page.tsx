@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
-import Link from "next/link";
-import { ArrowLeft, ArrowUpRight, Check, ExternalLink } from "lucide-react";
+import { ArrowUpRight, Check, ExternalLink } from "lucide-react";
 import { getCompany, allSlugs, companiesBySector } from "@/data/companies";
 import { sectorMeta, group } from "@/data/site";
 import { pageMeta } from "@/lib/seo";
@@ -9,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button";
 import { PlaceholderImage } from "@/components/PlaceholderImage";
 import { CompanyCard } from "@/components/CompanyCard";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Reveal, RevealGroup, RevealItem } from "@/components/motion/Reveal";
 
 export function generateStaticParams() {
@@ -48,12 +48,13 @@ export default function CompanyPage({ params }: { params: { slug: string } }) {
         </div>
         <div className="container grid gap-10 pb-16 pt-32 sm:pt-40 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
           <div>
-            <Link
-              href="/companies"
-              className="inline-flex items-center gap-1.5 text-sm text-sand-100/70 hover:text-white"
-            >
-              <ArrowLeft className="h-4 w-4" strokeWidth={1.8} /> All companies
-            </Link>
+            <Breadcrumbs
+              items={[
+                { href: "/", label: "Home" },
+                { href: "/companies", label: "Companies" },
+                { label: company.name },
+              ]}
+            />
             <div className="mt-6 flex items-center gap-3">
               <span className="grid h-12 w-12 place-items-center rounded-xl bg-white/10 text-gold-200">
                 <Icon name={meta.icon} className="h-6 w-6" />

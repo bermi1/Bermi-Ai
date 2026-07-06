@@ -237,6 +237,120 @@ export const serviceCategories: ServiceCategory[] = [
   },
 ];
 
+/**
+ * Partners & affiliations — sourced only from the verified company notes in
+ * data/companies.ts (no fabricated relationships).
+ */
+export interface Partner {
+  name: string;
+  relation: string;
+  sector: Sector;
+  companySlug: string;
+}
+
+export const partners: Partner[] = [
+  {
+    name: "Global Hospitals (India)",
+    relation: "Healthcare partner — Ampola Tasakhtaa Hospital",
+    sector: "Healthcare",
+    companySlug: "ampola-tasakhtaa-hospital",
+  },
+  {
+    name: "Louvre Hotels Group",
+    relation: "Golden Tulip franchise — hospitality",
+    sector: "Hospitality",
+    companySlug: "golden-tulip-zanzibar-boutique",
+  },
+  {
+    name: "Al Shahid Diesel System (Dubai)",
+    relation: "Affiliate — Habib Euro Diesel",
+    sector: "Automotive",
+    companySlug: "habib-euro-diesel",
+  },
+  {
+    name: "SONELEC (Comoros)",
+    relation: "National electricity company — renewable energy offtaker",
+    sector: "Energy",
+    companySlug: "renewable-energy-division",
+  },
+];
+
+/**
+ * Group journey — eras and dated milestones. Only facts from the brief are
+ * used; undated growth is expressed as an era, not an invented year.
+ */
+export interface Milestone {
+  period: string;
+  title: string;
+  body: string;
+}
+
+export const timeline: Milestone[] = [
+  {
+    period: "Early 1980s",
+    title: "A family tailoring mart",
+    body: "The Turky family opens a tailoring mart in Zanzibar — the foundation of everything that follows.",
+  },
+  {
+    period: "Following decades",
+    title: "Diversification",
+    body: "The business expands beyond tailoring into trade, manufacturing, hospitality and real estate across Zanzibar and mainland Tanzania.",
+  },
+  {
+    period: "2015",
+    title: "Into healthcare",
+    body: "Ampola Tasakhtaa Hospital opens in Stone Town — a 130-bed multi-specialty hospital, in association with Global Hospitals (India).",
+  },
+  {
+    period: "Today",
+    title: "A regional group",
+    body: "Sixteen companies and a workforce historically reported above 4,000, operating across Zanzibar, mainland Tanzania and the Union of Comoros — including a grid-scale solar plant supplying SONELEC.",
+  },
+];
+
+/** Country presence for the global-presence section. */
+export const presence = [
+  {
+    country: "Zanzibar",
+    note: "Headquarters and heartland — healthcare, hospitality, real estate, trade and manufacturing.",
+    isHq: true,
+  },
+  {
+    country: "Mainland Tanzania",
+    note: "Hospitality and manufacturing, including Golden Tulip Dar es Salaam and Kisarawe Cement.",
+    isHq: false,
+  },
+  {
+    country: "Union of Comoros",
+    note: "Grid-scale renewable energy — a hybrid solar PV-battery plant in Anjouan supplying SONELEC.",
+    isHq: false,
+  },
+];
+
+/** Frequently asked questions — factual, drawn from the brief. */
+export const faqs = [
+  {
+    q: "What is Vigor Group of Companies?",
+    a: "Vigor Group (legally Turky's Group of Companies) is a Zanzibar-headquartered family conglomerate of 16 companies spanning healthcare, hospitality, real estate, manufacturing, trade, energy and communications.",
+  },
+  {
+    q: "Is the group connected to the country of Turkey?",
+    a: "No. Despite the founding family's surname (Turky), the group has no connection to the country of Turkey. It is a Zanzibari family enterprise.",
+  },
+  {
+    q: "Where does the group operate?",
+    a: "Across three territories: Zanzibar (headquarters), mainland Tanzania, and the Union of Comoros.",
+  },
+  {
+    q: "How do I partner with or supply to the group?",
+    a: "Use the contact form and we'll route your enquiry to the right company. One message reaches the whole group.",
+  },
+  {
+    q: "How can I apply for a job?",
+    a: "Visit the Careers page for openings across all subsidiaries, or send an open application — we keep applications on file across every company.",
+  },
+];
+
 export const nav = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About" },

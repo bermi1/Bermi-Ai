@@ -8,6 +8,8 @@ import { CTABand } from "@/components/CTABand";
 import { PlaceholderImage } from "@/components/PlaceholderImage";
 import { Reveal, RevealGroup, RevealItem } from "@/components/motion/Reveal";
 import { PageHeader } from "@/components/PageHeader";
+import { Timeline } from "@/components/Timeline";
+import { Partners } from "@/components/Partners";
 
 export const metadata = pageMeta({
   title: "About the group",
@@ -57,8 +59,24 @@ export default function AboutPage() {
         </Reveal>
       </section>
 
-      {/* Founders & leadership */}
+      {/* Journey timeline */}
       <section className="bg-sand-100/70 py-16">
+        <div className="container">
+          <Reveal>
+            <SectionHeading
+              eyebrow="Our journey"
+              title="From 1980 to today"
+              intro="Four decades of growth, told in milestones."
+            />
+          </Reveal>
+          <div className="mt-12 max-w-3xl">
+            <Timeline />
+          </div>
+        </div>
+      </section>
+
+      {/* Founders & leadership */}
+      <section className="py-16">
         <div className="container">
           <Reveal>
             <SectionHeading
@@ -101,6 +119,22 @@ export default function AboutPage() {
 
       {/* Values */}
       <ValuesSection />
+
+      {/* Partners */}
+      <section className="bg-sand-100/70 py-16">
+        <div className="container">
+          <Reveal>
+            <SectionHeading
+              eyebrow="Partners & affiliations"
+              title="Working with the world"
+              intro="Verified partnerships that extend the group's reach across sectors and borders."
+            />
+          </Reveal>
+          <div className="mt-10">
+            <Partners />
+          </div>
+        </div>
+      </section>
 
       <CTABand
         title="Work with a group that's built to last"

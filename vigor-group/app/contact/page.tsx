@@ -1,8 +1,10 @@
 import { Mail, MapPin, Phone } from "lucide-react";
-import { group } from "@/data/site";
+import { group, faqs } from "@/data/site";
 import { pageMeta } from "@/lib/seo";
 import { PageHeader } from "@/components/PageHeader";
 import { EnquiryForm } from "@/components/EnquiryForm";
+import { SectionHeading } from "@/components/SectionHeading";
+import { Accordion } from "@/components/ui/accordion";
 import { Reveal } from "@/components/motion/Reveal";
 
 export const metadata = pageMeta({
@@ -96,6 +98,23 @@ export default function ContactPage() {
             <EnquiryForm subjectPrefix="Contact enquiry" />
           </div>
         </Reveal>
+      </section>
+
+      {/* FAQ */}
+      <section className="bg-sand-100/70 py-16">
+        <div className="container max-w-3xl">
+          <Reveal>
+            <SectionHeading
+              align="center"
+              eyebrow="FAQ"
+              title="Questions, answered"
+              className="mx-auto"
+            />
+          </Reveal>
+          <Reveal className="mt-10" delay={0.05}>
+            <Accordion items={faqs.map((f) => ({ q: f.q, a: f.a }))} />
+          </Reveal>
+        </div>
       </section>
     </>
   );

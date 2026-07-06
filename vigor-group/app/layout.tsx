@@ -4,6 +4,7 @@ import "./globals.css";
 import { group } from "@/data/site";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { OrganizationJsonLd } from "@/components/JsonLd";
 
 /**
  * PLACEHOLDER type system (see README > "Brand & design"):
@@ -50,6 +51,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
           Skip to content
         </a>
+        <OrganizationJsonLd />
         <Navbar />
         <main id="main">{children}</main>
         <Footer />

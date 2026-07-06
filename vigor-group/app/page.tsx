@@ -8,6 +8,8 @@ import { SectorSpotlight } from "@/components/home/SectorSpotlight";
 import { SectionHeading } from "@/components/SectionHeading";
 import { ValuesSection } from "@/components/ValuesSection";
 import { LeadershipStrip } from "@/components/LeadershipStrip";
+import { GlobalPresence } from "@/components/GlobalPresence";
+import { Partners } from "@/components/Partners";
 import { CTABand } from "@/components/CTABand";
 import { CompanyCard } from "@/components/CompanyCard";
 import { Reveal } from "@/components/motion/Reveal";
@@ -66,6 +68,9 @@ export default function HomePage() {
       {/* Values */}
       <ValuesSection />
 
+      {/* Global presence */}
+      <GlobalPresence />
+
       {/* Leadership */}
       <section className="bg-sand-100/70 py-20 sm:py-24">
         <div className="container">
@@ -88,6 +93,20 @@ export default function HomePage() {
               <ArrowRight className="h-4 w-4" strokeWidth={2} />
             </Link>
           </Reveal>
+        </div>
+      </section>
+
+      {/* Partners & affiliations */}
+      <section className="container py-20 sm:py-24">
+        <Reveal>
+          <SectionHeading
+            eyebrow="Partners & affiliations"
+            title="Trusted by international brands"
+            intro="The group's companies operate alongside established international partners across sectors."
+          />
+        </Reveal>
+        <div className="mt-12">
+          <Partners />
         </div>
       </section>
 

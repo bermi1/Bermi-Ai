@@ -2,24 +2,64 @@
 
 import { useMemo, useState } from "react";
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
+import { Search, X } from "lucide-react";
 import { companies, activeSectors, type Sector } from "@/data/companies";
 import { cn } from "@/lib/utils";
 import { CompanyCard } from "@/components/CompanyCard";
 
 type Filter = Sector | "All";
 
-/** Full, filterable grid of all subsidiaries with smooth layout reflow. */
+/** Full, filterable + searchable grid of all subsidiaries with smooth reflow. */
 export function CompanyGrid() {
   const [filter, setFilter] = useState<Filter>("All");
+  const [query, setQuery] = useState("");
 
   const filters: Filter[] = useMemo(() => ["All", ...activeSectors], []);
-  const visible = useMemo(
-    () => (filter === "All" ? companies : companies.filter((c) => c.sector === filter)),
-    [filter],
-  );
+  const visible = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return companies.filter((c) => {
+      const bySector = filter === "All" || c.sector === filter;
+      const byQuery =
+        q === "" ||
+        c.name.toLowerCase().includes(q) ||
+        c.description.toLowerCase().includes(q) ||
+        c.sector.toLowerCase().includes(q);
+      return bySector && byQuery;
+    });
+  }, [filter, query]);
 
   return (
     <div>
+      <div className="mb-6">
+        <label htmlFor="company-search" className="sr-only">
+          Search companies
+        </label>
+        <div className="relative max-w-md">
+          <Search
+            className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-400"
+            strokeWidth={1.8}
+          />
+          <input
+            id="company-search"
+            type="search"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search companies…"
+            className="w-full rounded-full border border-ink-900/15 bg-white py-2.5 pl-10 pr-10 text-sm text-ink-900 placeholder:text-ink-400 focus:border-ink-500 focus:outline-none focus:ring-2 focus:ring-gold-300"
+          />
+          {query && (
+            <button
+              type="button"
+              onClick={() => setQuery("")}
+              aria-label="Clear search"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-400 hover:text-ink-700"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
+        </div>
+      </div>
+
       <div
         role="tablist"
         aria-label="Filter companies by sector"
@@ -61,9 +101,29 @@ export function CompanyGrid() {
         </motion.div>
       </LayoutGroup>
 
+      {visible.length === 0 && (
+        <div className="rounded-2xl border border-dashed border-ink-900/15 bg-white/50 p-10 text-center">
+          <p className="font-heading text-lg font-semibold text-ink-900">No companies found</p>
+          <p className="mt-1.5 text-sm text-ink-600">
+            Try a different search term or sector filter.
+          </p>
+          <button
+            type="button"
+            onClick={() => {
+              setQuery("");
+              setFilter("All");
+            }}
+            className="mt-4 rounded-full bg-ink-800 px-4 py-2 text-sm font-medium text-white hover:bg-ink-900"
+          >
+            Reset filters
+          </button>
+        </div>
+      )}
+
       <p className="mt-8 text-sm text-ink-500" aria-live="polite">
         Showing {visible.length} of {companies.length} companies
-        {filter !== "All" ? ` in ${filter}` : ""}.
+        {filter !== "All" ? ` in ${filter}` : ""}
+        {query ? ` matching “${query}”` : ""}.
       </p>
     </div>
   );

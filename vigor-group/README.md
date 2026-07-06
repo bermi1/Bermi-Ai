@@ -137,6 +137,24 @@ fabricated.
 
 ---
 
+## Beyond the brief
+
+Extra depth layered on top of the required pages:
+
+- **Company search** — the `/companies` grid has a live text search alongside the sector
+  filter, with an empty state and reset.
+- **Group journey timeline** — an animated 1980s→today milestone timeline on About
+  (`components/Timeline.tsx`), built only from facts in the brief.
+- **Global presence** — a three-territory section (Zanzibar / mainland Tanzania / Comoros).
+- **Partners & affiliations** — surfaced on Home and About from the verified company notes
+  (Global Hospitals, Louvre Hotels/Golden Tulip, Al Shahid Diesel, SONELEC) — no invented ties.
+- **FAQ accordion** — accessible, animated, single-open (`components/ui/accordion.tsx`) on Contact.
+- **Breadcrumbs** on company sub-pages.
+- **Organization JSON-LD** structured data (`components/JsonLd.tsx`) for richer search results.
+- **`loading` / `error` states** and a **web app manifest** (`app/manifest.ts`) for mobile install.
+
+Content for all of the above lives in `data/site.ts` (partners, timeline, presence, faqs).
+
 ## What this build fixes (vs. the incumbent sites)
 
 - **Real SEO** — every page is server-rendered and exports real `title`, `description` and
