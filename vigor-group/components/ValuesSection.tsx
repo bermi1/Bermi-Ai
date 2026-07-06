@@ -11,7 +11,7 @@ export function ValuesSection() {
         <SectionHeading
           eyebrow="What we stand for"
           title="Values built over four decades"
-          intro="From a single tailoring mart to sixteen companies, the same principles have carried the family forward."
+          intro="From a single tailoring mart in 1980 to a group across three countries, the same principles have carried the family forward."
         />
       </Reveal>
 
@@ -20,15 +20,15 @@ export function ValuesSection() {
           <RevealItem
             as="li"
             key={v.title}
-            className="rounded-2xl border border-ink-900/10 bg-white p-6 shadow-card"
+            className="rounded-2xl border border-graphite-900/10 bg-white p-6 shadow-card"
           >
-            <span className="grid h-12 w-12 place-items-center rounded-xl bg-gold-100 text-gold-700">
+            <span className="grid h-12 w-12 place-items-center rounded-xl bg-brand-100 text-brand-700">
               <Icon name={v.icon} className="h-6 w-6" />
             </span>
-            <h3 className="mt-5 font-heading text-lg font-semibold text-ink-900">
+            <h3 className="mt-5 font-heading text-lg font-semibold text-graphite-900">
               {v.title}
             </h3>
-            <p className="mt-2 text-sm leading-relaxed text-ink-600">{v.body}</p>
+            <p className="mt-2 text-sm leading-relaxed text-graphite-600">{v.body}</p>
           </RevealItem>
         ))}
       </RevealGroup>

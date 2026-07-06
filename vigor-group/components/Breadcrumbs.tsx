@@ -10,7 +10,7 @@ export interface Crumb {
 export function Breadcrumbs({ items }: { items: Crumb[] }) {
   return (
     <nav aria-label="Breadcrumb">
-      <ol className="flex flex-wrap items-center gap-1.5 text-sm text-sand-100/70">
+      <ol className="flex flex-wrap items-center gap-1.5 text-sm text-graphite-100/70">
         {items.map((item, i) => {
           const last = i === items.length - 1;
           return (
@@ -24,7 +24,7 @@ export function Breadcrumbs({ items }: { items: Crumb[] }) {
                   {item.label}
                 </span>
               )}
-              {!last && <ChevronRight className="h-3.5 w-3.5 text-sand-100/40" strokeWidth={2} />}
+              {!last && <ChevronRight className="h-3.5 w-3.5 text-graphite-100/40" strokeWidth={2} />}
             </li>
           );
         })}

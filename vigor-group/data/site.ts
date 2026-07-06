@@ -1,35 +1,48 @@
-import type { Sector } from "./companies";
+import { companies, activeSectors, type Sector } from "./companies";
 
-/** Group-level facts. All values sourced from the brief — do not invent figures. */
+/**
+ * Group-level facts, compiled from the group's own public sources
+ * (turkysgroup.co.tz, The Citizen, ZIBI magazine, LinkedIn). Mission and
+ * vision are quoted from the group's published statements.
+ */
 export const group = {
+  brand: "VIGOR",
   tradingName: "Vigor Group of Companies",
-  legalName: "Turky's Group of Companies",
+  legalName: "Turky's Group of Companies Limited",
+  descriptor: "A Turky's Group of Companies",
   tagline: "Trusted Solutions for Life and Business",
-  founded: "Early 1980s",
+  positioningShort: "Serving people, serving nations.",
+  founded: "1980",
   positioning:
-    "From a family tailoring mart in Zanzibar to a diversified East African group — one family of companies serving life and business across healthcare, hospitality, real estate, manufacturing, trade, energy and communications.",
+    "From a small family tailoring mart in 1980s Zanzibar to a diversified group across three countries — one family of companies serving life and business through healthcare, hospitality, real estate, manufacturing, trade, logistics, energy and more.",
+  mission:
+    "To invest in supplies, services, and local talent in ways that create value, generate employment, and improve quality of life for the communities we serve.",
+  vision:
+    "To set new benchmarks in quality, accessibility, and sustainable development — bringing world-class opportunities to local and global markets, and fostering progress through investment in services, infrastructure, and local talent.",
   hq: {
     street: "Migombani Street",
     city: "Zanzibar",
     poBox: "P.O. Box 271",
     country: "Tanzania",
   },
-  email: "info@vigorgroup.co.tz",
-  phone: "+255 24 000 0000",
+  email: "info@turkysgroup.co.tz",
+  phone: "+255 671 700 800",
+  phoneAlt: "+255 651 700 800",
   countries: ["Zanzibar", "Mainland Tanzania", "Union of Comoros"],
   stats: {
-    companies: 16,
+    companies: companies.length,
     employees: 4000,
     countries: 3,
+    sectors: activeSectors.length,
   },
-  url: "https://www.vigorgroup.co.tz",
+  url: "https://turkysgroup.co.tz",
 };
 
 export const leadership = [
   {
     name: "Taufiq Salim Turky",
     title: "Chairman",
-    bio: "Former Chairman of the East African Chamber of Commerce, Industry & Agriculture; former President of the Zanzibar National Chamber of Commerce, Industry & Agriculture.",
+    bio: "Former Chairman of the East African Chamber of Commerce, Industry & Agriculture (EACCIA) and former President of the Zanzibar National Chamber of Commerce, Industry & Agriculture (ZNCCIA).",
   },
   {
     name: "Abdallah Salim Turky",
@@ -43,10 +56,9 @@ export const leadership = [
   },
 ];
 
-/** Founding narrative anchors — used on About. */
 export const founders = {
   intro:
-    "The group traces its roots to the early 1980s, when the Turky family opened a tailoring mart in Zanzibar.",
+    "The group traces its roots to the early 1980s, when the Turky family opened a small tailoring mart in Zanzibar — founded on craftsmanship, dedication and family values, and incorporated in 1980 as Turky's Group of Companies Limited.",
   people: [
     { name: "Salim Turky", note: "Founder" },
     { name: "Murtadha Turky", note: "Founder" },
@@ -57,124 +69,163 @@ export const founders = {
 
 export const values = [
   {
-    title: "Integrity",
-    body: "Trusted solutions, delivered honestly — the reputation the family has built since the 1980s.",
+    title: "Quality",
+    body: "Delivering exceptional quality in every product and service — the standard the family has held since 1980.",
     icon: "shield",
   },
   {
-    title: "Heritage",
-    body: "A Zanzibari family enterprise, grounded in the community it grew from.",
-    icon: "landmark",
-  },
-  {
-    title: "Diversification",
-    body: "Sixteen companies across seven sectors, resilient by design.",
-    icon: "layers",
-  },
-  {
-    title: "Service",
-    body: "Solutions for both life and business — from hospitals and hotels to fuel and housing.",
+    title: "Trust",
+    body: "Maintaining trust and building long-lasting relationships with every client and community.",
     icon: "heart-handshake",
   },
   {
-    title: "Growth",
-    body: "Operations spanning Zanzibar, mainland Tanzania and the Union of Comoros.",
+    title: "Community",
+    body: "Empowering people in Zanzibar to achieve their dreams while building stronger communities.",
+    icon: "landmark",
+  },
+  {
+    title: "Sustainability",
+    body: "Nurturing the planet and investing in sustainable development across every industry we serve.",
     icon: "trending-up",
+  },
+  {
+    title: "Ethical governance",
+    body: "Upholding ethical governance as the group grows across borders and sectors.",
+    icon: "layers",
   },
 ];
 
 /**
- * Per-sector presentation metadata: the spotlight carousel, chip filters,
- * card tags and per-sector contextual CTAs all read from here.
+ * Per-sector presentation metadata. Each sector carries its own accent COLOUR,
+ * giving every business unit a distinct identity while VIGOR red remains the
+ * unifying group colour.
  */
 export interface SectorMeta {
   sector: Sector;
   label: string;
   blurb: string;
   icon: string;
-  cta: { label: string; kind: "email" | "link" };
+  color: string; // hex accent for this unit
+  cta: { label: string };
 }
 
 export const sectorMeta: Record<Sector, SectorMeta> = {
   Healthcare: {
     sector: "Healthcare",
     label: "Healthcare",
-    blurb: "Multi-specialty hospitals bringing modern care to Zanzibar and beyond.",
+    blurb: "Multi-specialty hospitals bringing modern care to Zanzibar.",
     icon: "stethoscope",
-    cta: { label: "Request an appointment", kind: "email" },
+    color: "#0f9d8f",
+    cta: { label: "Request an appointment" },
   },
   Hospitality: {
     sector: "Hospitality",
     label: "Hospitality",
-    blurb: "International hotel brands and boutique stays across the coast.",
+    blurb: "International Golden Tulip hotels and boutique coastal stays.",
     icon: "bed-double",
-    cta: { label: "Book now", kind: "email" },
+    color: "#c98a1a",
+    cta: { label: "Book now" },
   },
   "Real Estate": {
     sector: "Real Estate",
     label: "Real Estate",
-    blurb: "Waterfront developments and furnished homes for residents and investors.",
+    blurb: "Waterfront development and furnished homes for residents and investors.",
     icon: "building-2",
-    cta: { label: "Enquire", kind: "email" },
+    color: "#2f6f9f",
+    cta: { label: "Enquire" },
   },
   Manufacturing: {
     sector: "Manufacturing",
-    label: "Manufacturing & Trade",
+    label: "Manufacturing",
     blurb: "Bottling, packaging and cement — production that supplies the region.",
     icon: "factory",
-    cta: { label: "Enquire", kind: "email" },
+    color: "#d97706",
+    cta: { label: "Enquire" },
   },
   Trade: {
     sector: "Trade",
-    label: "Trade",
+    label: "Trade & Merchandise",
     blurb: "Food and construction-materials importation and distribution at scale.",
     icon: "package",
-    cta: { label: "Enquire", kind: "email" },
+    color: "#3f8f3f",
+    cta: { label: "Enquire" },
   },
   Energy: {
     sector: "Energy",
     label: "Energy",
-    blurb: "LPG distribution and grid-scale renewable energy across the Union of Comoros.",
+    blurb: "LPG distribution and grid-scale renewable energy across the region.",
     icon: "zap",
-    cta: { label: "Enquire", kind: "email" },
+    color: "#eab308",
+    cta: { label: "Enquire" },
   },
   Communications: {
     sector: "Communications",
     label: "Communications",
     blurb: "Connecting the group's markets across East Africa.",
     icon: "radio-tower",
-    cta: { label: "Enquire", kind: "email" },
+    color: "#7c4dff",
+    cta: { label: "Enquire" },
   },
   Automotive: {
     sector: "Automotive",
     label: "Automotive",
     blurb: "Diesel systems engineering and automotive solutions.",
     icon: "wrench",
-    cta: { label: "Enquire", kind: "email" },
+    color: "#55606b",
+    cta: { label: "Enquire" },
+  },
+  Logistics: {
+    sector: "Logistics",
+    label: "Logistics",
+    blurb: "Moving people and goods across the group's territories.",
+    icon: "truck",
+    color: "#4f46e5",
+    cta: { label: "Enquire" },
+  },
+  Maritime: {
+    sector: "Maritime",
+    label: "Maritime",
+    blurb: "High-speed ferries linking Zanzibar and Dar es Salaam.",
+    icon: "ship",
+    color: "#0e7fb8",
+    cta: { label: "Book a crossing" },
+  },
+  Aviation: {
+    sector: "Aviation",
+    label: "Aviation",
+    blurb: "Air services connecting the islands and beyond.",
+    icon: "plane",
+    color: "#2596d1",
+    cta: { label: "Enquire" },
+  },
+  Financial: {
+    sector: "Financial",
+    label: "Financial Services",
+    blurb: "Financial services extending the group's reach in the Comoros.",
+    icon: "wallet",
+    color: "#0f8a5f",
+    cta: { label: "Enquire" },
   },
   Services: {
     sector: "Services",
     label: "Services",
-    blurb: "Supporting services that keep the group running.",
+    blurb: "Cleaning and facilities services that keep the group running.",
     icon: "sparkles",
-    cta: { label: "Enquire", kind: "email" },
+    color: "#6b7280",
+    cta: { label: "Enquire" },
   },
 };
 
-/** The six sectors spotlighted on the home carousel (per the brief). */
+/** Sectors spotlighted on the home carousel. */
 export const spotlightSectors: Sector[] = [
   "Healthcare",
   "Hospitality",
   "Real Estate",
   "Manufacturing",
   "Energy",
-  "Communications",
+  "Maritime",
 ];
 
-/**
- * Cross-cutting service index for /services — organised by NEED, not by which
- * subsidiary owns it. Each category maps to the company slugs that serve it.
- */
 export interface ServiceCategory {
   title: string;
   description: string;
@@ -194,8 +245,9 @@ export const serviceCategories: ServiceCategory[] = [
     description: "International-brand hotels and boutique coastal stays.",
     icon: "bed-double",
     companySlugs: [
-      "golden-tulip-zanzibar-boutique",
+      "golden-tulip-stone-town",
       "golden-tulip-dar-es-salaam-city-center",
+      "golden-tulip-grande-comore",
       "zanzibar-grand-beach-villa",
     ],
   },
@@ -221,26 +273,29 @@ export const serviceCategories: ServiceCategory[] = [
     title: "Energy & Fuel",
     description: "LPG distribution and grid-scale renewable energy.",
     icon: "zap",
-    companySlugs: ["turkys-lpg", "renewable-energy-division"],
+    companySlugs: ["turkys-lpg", "green-energy"],
+  },
+  {
+    title: "Logistics & Transport",
+    description: "Aviation, high-speed ferries and diesel/automotive services.",
+    icon: "truck",
+    companySlugs: ["vigor-aviation", "zan-fast-ferries", "habib-euro-diesel"],
   },
   {
     title: "Communications",
     description: "Communications infrastructure and services.",
     icon: "radio-tower",
-    companySlugs: ["nitak-limited"],
+    companySlugs: ["nitak-communications"],
   },
   {
-    title: "Automotive",
-    description: "Diesel systems engineering and automotive solutions.",
-    icon: "wrench",
-    companySlugs: ["habib-euro-diesel"],
+    title: "Financial Services",
+    description: "Financial services in the Union of Comoros.",
+    icon: "wallet",
+    companySlugs: ["vigo-financial-services"],
   },
 ];
 
-/**
- * Partners & affiliations — sourced only from the verified company notes in
- * data/companies.ts (no fabricated relationships).
- */
+/** Partners & affiliations — only verified relationships. */
 export interface Partner {
   name: string;
   relation: string;
@@ -259,7 +314,7 @@ export const partners: Partner[] = [
     name: "Louvre Hotels Group",
     relation: "Golden Tulip franchise — hospitality",
     sector: "Hospitality",
-    companySlug: "golden-tulip-zanzibar-boutique",
+    companySlug: "golden-tulip-stone-town",
   },
   {
     name: "Al Shahid Diesel System (Dubai)",
@@ -271,14 +326,10 @@ export const partners: Partner[] = [
     name: "SONELEC (Comoros)",
     relation: "National electricity company — renewable energy offtaker",
     sector: "Energy",
-    companySlug: "renewable-energy-division",
+    companySlug: "green-energy",
   },
 ];
 
-/**
- * Group journey — eras and dated milestones. Only facts from the brief are
- * used; undated growth is expressed as an era, not an invented year.
- */
 export interface Milestone {
   period: string;
   title: string;
@@ -287,14 +338,14 @@ export interface Milestone {
 
 export const timeline: Milestone[] = [
   {
-    period: "Early 1980s",
+    period: "1980",
     title: "A family tailoring mart",
-    body: "The Turky family opens a tailoring mart in Zanzibar — the foundation of everything that follows.",
+    body: "The Turky family opens a small tailoring mart in Zanzibar, incorporated as Turky's Group of Companies Limited — founded on craftsmanship, dedication and family values.",
   },
   {
-    period: "Following decades",
-    title: "Diversification",
-    body: "The business expands beyond tailoring into trade, manufacturing, hospitality and real estate across Zanzibar and mainland Tanzania.",
+    period: "2004",
+    title: "Into manufacturing",
+    body: "Zainab Bottlers is established to produce affordable, quality beverages for the regional market — a flagship of the group's manufacturing arm.",
   },
   {
     period: "2015",
@@ -303,35 +354,33 @@ export const timeline: Milestone[] = [
   },
   {
     period: "Today",
-    title: "A regional group",
-    body: "Sixteen companies and a workforce historically reported above 4,000, operating across Zanzibar, mainland Tanzania and the Union of Comoros — including a grid-scale solar plant supplying SONELEC.",
+    title: "A three-country group",
+    body: "A diversified group of companies and a workforce reported above 4,000, operating across Zanzibar, mainland Tanzania and the Union of Comoros — from ferries and hotels to a grid-scale solar plant supplying SONELEC.",
   },
 ];
 
-/** Country presence for the global-presence section. */
 export const presence = [
   {
     country: "Zanzibar",
-    note: "Headquarters and heartland — healthcare, hospitality, real estate, trade and manufacturing.",
+    note: "Headquarters and heartland — healthcare, hospitality, real estate, trade, manufacturing, energy and maritime.",
     isHq: true,
   },
   {
     country: "Mainland Tanzania",
-    note: "Hospitality and manufacturing, including Golden Tulip Dar es Salaam and Kisarawe Cement.",
+    note: "Hospitality and manufacturing, including Golden Tulip Dar es Salaam, Kisarawe Cement and Zan Fast Ferries routes.",
     isHq: false,
   },
   {
     country: "Union of Comoros",
-    note: "Grid-scale renewable energy — a hybrid solar PV-battery plant in Anjouan supplying SONELEC.",
+    note: "Hospitality, financial services and grid-scale renewable energy — a solar plant in Anjouan supplying SONELEC.",
     isHq: false,
   },
 ];
 
-/** Frequently asked questions — factual, drawn from the brief. */
 export const faqs = [
   {
     q: "What is Vigor Group of Companies?",
-    a: "Vigor Group (legally Turky's Group of Companies) is a Zanzibar-headquartered family conglomerate of 16 companies spanning healthcare, hospitality, real estate, manufacturing, trade, energy and communications.",
+    a: "VIGOR (legally Turky's Group of Companies Limited) is a Zanzibar-headquartered family group incorporated in 1980, operating across healthcare, hospitality, real estate, manufacturing, trade, logistics, maritime, energy, communications and financial services.",
   },
   {
     q: "Is the group connected to the country of Turkey?",

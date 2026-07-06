@@ -7,9 +7,9 @@ export function Badge({
   ...props
 }: React.HTMLAttributes<HTMLSpanElement> & { tone?: "ink" | "gold" | "muted" }) {
   const tones = {
-    ink: "bg-ink-800/8 text-ink-800",
-    gold: "bg-gold-100 text-gold-800",
-    muted: "bg-ink-900/5 text-ink-700",
+    ink: "bg-graphite-800/8 text-graphite-800",
+    gold: "bg-brand-100 text-brand-800",
+    muted: "bg-graphite-900/5 text-graphite-700",
   };
   return (
     <span

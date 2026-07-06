@@ -1,9 +1,10 @@
 /**
  * SINGLE SOURCE OF TRUTH for every subsidiary.
  *
- * Every company card, sector filter, dynamic route (/companies/[slug]),
- * footer quick-link and sitemap entry is generated from this array.
- * Adding company #17 is a one-line change here — never a new page build.
+ * Content compiled from the group's own public sources (turkysgroup.co.tz,
+ * The Citizen, ZIBI magazine, LinkedIn). Every card, filter, dynamic route,
+ * footer link and sitemap entry is generated from this array — adding a new
+ * company is a one-line change.
  */
 
 export type Sector =
@@ -15,6 +16,10 @@ export type Sector =
   | "Energy"
   | "Communications"
   | "Automotive"
+  | "Logistics"
+  | "Maritime"
+  | "Aviation"
+  | "Financial"
   | "Services";
 
 export interface Company {
@@ -23,19 +28,20 @@ export interface Company {
   sector: Sector;
   description: string;
   notes: string;
-  /** Optional short list of services/products shown on the company sub-page. */
+  country?: string;
   offerings?: string[];
-  /** Optional external site the subsidiary currently runs. */
   externalUrl?: string;
 }
 
 export const companies: Company[] = [
+  // ── Healthcare ──────────────────────────────────────────────
   {
     slug: "ampola-tasakhtaa-hospital",
     name: "Ampola Tasakhtaa Hospital",
     sector: "Healthcare",
     description: "130-bed multi-specialty hospital in Stone Town (Vuga), Zanzibar.",
     notes: "Established 2015 in association with Global Hospitals (India).",
+    country: "Zanzibar",
     offerings: [
       "Inpatient & emergency care",
       "Surgery & specialist clinics",
@@ -47,41 +53,57 @@ export const companies: Company[] = [
     slug: "ampola-regency-hospital",
     name: "Ampola Regency Hospital",
     sector: "Healthcare",
-    description: "Second hospital brand under the group's healthcare division.",
+    description: "The group's second hospital brand under its healthcare division.",
     notes: "",
-    offerings: ["Outpatient services", "Specialist consultations", "Diagnostic services"],
+    country: "Zanzibar",
+    offerings: ["Outpatient services", "Specialist consultations", "Diagnostics"],
   },
+  // ── Hospitality ─────────────────────────────────────────────
   {
-    slug: "golden-tulip-zanzibar-boutique",
-    name: "Golden Tulip Zanzibar Boutique",
+    slug: "golden-tulip-stone-town",
+    name: "Golden Tulip Stone Town",
     sector: "Hospitality",
-    description: "Boutique hotel operated under franchise with Louvre Hotels Group.",
+    description: "Boutique hotel in historic Stone Town, Zanzibar, under franchise with Louvre Hotels Group.",
     notes: "International Golden Tulip brand franchise.",
+    country: "Zanzibar",
     offerings: ["Boutique rooms & suites", "Restaurant & bar", "Events & conferencing"],
   },
   {
     slug: "golden-tulip-dar-es-salaam-city-center",
     name: "Golden Tulip Dar es Salaam City Center",
     sector: "Hospitality",
-    description: "Hotel franchise property on mainland Tanzania.",
+    description: "City-centre hotel franchise property on mainland Tanzania.",
     notes: "",
+    country: "Mainland Tanzania",
     offerings: ["City-centre accommodation", "Business facilities", "Dining"],
+  },
+  {
+    slug: "golden-tulip-grande-comore",
+    name: "Golden Tulip Grande Comore",
+    sector: "Hospitality",
+    description: "Golden Tulip hotel property in the Union of Comoros.",
+    notes: "",
+    country: "Union of Comoros",
+    offerings: ["Hotel accommodation", "Dining", "Events"],
   },
   {
     slug: "zanzibar-grand-beach-villa",
     name: "Zanzibar Grand Beach Villa & Boutique",
     sector: "Hospitality",
-    description: "Boutique villa property in Zanzibar.",
+    description: "Boutique beachfront villa property in Zanzibar.",
     notes: "",
+    country: "Zanzibar",
     offerings: ["Beachfront villas", "Private hospitality", "Leisure stays"],
   },
+  // ── Real Estate ─────────────────────────────────────────────
   {
     slug: "zanzibar-waterfront",
     name: "Zanzibar Waterfront",
     sector: "Real Estate",
-    description: "Active waterfront development project.",
-    notes: "Has its own dedicated site today (zanzibarwaterfront.co.tz).",
-    externalUrl: "https://zanzibarwaterfront.co.tz",
+    description: "Flagship waterfront real-estate development in Zanzibar.",
+    notes: "Runs its own dedicated site (zanzibarwaterfront.com).",
+    country: "Zanzibar",
+    externalUrl: "https://www.zanzibarwaterfront.com",
     offerings: ["Waterfront development", "Mixed-use property", "Investment opportunities"],
   },
   {
@@ -90,14 +112,18 @@ export const companies: Company[] = [
     sector: "Real Estate",
     description: "Fully-furnished luxury apartments and villas for guests and investors.",
     notes: "",
+    country: "Zanzibar",
     offerings: ["Furnished apartments", "Luxury villas", "Rentals & sales", "Property investment"],
   },
+  // ── Manufacturing ───────────────────────────────────────────
   {
     slug: "zainab-bottlers",
     name: "Zainab Bottlers",
     sector: "Manufacturing",
-    description: "Beverage bottling and manufacturing.",
-    notes: "",
+    description: "Beverage bottling and manufacturing — one of the group's flagship investments.",
+    notes: "Established 2004, producing affordable, quality products for the regional market.",
+    country: "Zanzibar",
+    externalUrl: "https://zainabbottlers.co.tz",
     offerings: ["Beverage bottling", "Manufacturing & packaging", "Distribution"],
   },
   {
@@ -106,71 +132,111 @@ export const companies: Company[] = [
     sector: "Manufacturing",
     description: "Bags and packaging production.",
     notes: '"Mifuko" is Swahili for bags/packaging.',
+    country: "Zanzibar",
     offerings: ["Bag manufacturing", "Industrial packaging", "Custom production"],
-  },
-  {
-    slug: "zenj-general-merchandise",
-    name: "Zenj General Merchandise",
-    sector: "Trade",
-    description:
-      "One of the largest importers/stockists of food and construction materials in Zanzibar.",
-    notes: "",
-    offerings: ["Food importation", "Construction materials", "Wholesale supply"],
   },
   {
     slug: "kisarawe-cement",
     name: "Kisarawe Cement Company Limited",
     sector: "Manufacturing",
-    description: "Cement trading and manufacturing, mainland Tanzania.",
+    description: "Cement manufacturing and trading on mainland Tanzania.",
     notes: "",
+    country: "Mainland Tanzania",
     offerings: ["Cement manufacturing", "Cement trading", "Construction supply"],
   },
+  // ── Trade / Merchandise ─────────────────────────────────────
   {
-    slug: "nitak-limited",
-    name: "Nitak Limited",
-    sector: "Communications",
-    description: "Communications sector company.",
-    notes: "",
-    offerings: ["Communications services"],
+    slug: "zenj-general-merchandise",
+    name: "Zenj General Merchandise",
+    sector: "Trade",
+    description:
+      "One of the largest importers and stockists of food products and construction materials in Zanzibar.",
+    notes: "Distributes across Zanzibar through Vigor outlets.",
+    country: "Zanzibar",
+    offerings: ["FMCG importation", "Construction materials", "Wholesale & retail supply"],
   },
+  // ── Energy ──────────────────────────────────────────────────
   {
     slug: "turkys-lpg",
-    name: "Turky's LPG Co Limited",
+    name: "Turky's LPG Gas",
     sector: "Energy",
-    description: "LPG (cooking gas) distribution.",
+    description: "LPG (cooking gas) supply and distribution.",
     notes: "",
+    country: "Zanzibar",
     offerings: ["LPG cylinder supply", "Cooking gas distribution", "Bulk & retail"],
   },
   {
-    slug: "habib-euro-diesel",
-    name: "Habib Euro Diesel",
-    sector: "Automotive",
-    description: "Diesel system engineering and solutions.",
-    notes: "Affiliate of Al Shahid Diesel System, Dubai.",
-    offerings: ["Diesel system engineering", "Injection & pump services", "Automotive solutions"],
-  },
-  {
-    slug: "renewable-energy-division",
-    name: "Renewable Energy Division (PV-BESS)",
+    slug: "green-energy",
+    name: "Green Energy (PV-BESS)",
     sector: "Energy",
-    description: "Hybrid solar PV-battery energy storage plant in Anjouan, Comoros.",
-    notes: "Supplies Comoros' national electricity company (SONELEC).",
+    description: "Hybrid solar PV-battery energy storage plant in Anjouan, Union of Comoros.",
+    notes: "Supplies Comoros' national electricity company, SONELEC.",
+    country: "Union of Comoros",
     offerings: ["Solar PV generation", "Battery energy storage", "Grid-scale supply"],
   },
+  // ── Communications ──────────────────────────────────────────
+  {
+    slug: "nitak-communications",
+    name: "Nitak Communications",
+    sector: "Communications",
+    description: "Communications infrastructure and services.",
+    notes: "",
+    country: "Zanzibar",
+    offerings: ["Communications services", "Connectivity"],
+  },
+  // ── Logistics / Aviation / Maritime / Automotive ────────────
+  {
+    slug: "vigor-aviation",
+    name: "Vigor Aviation",
+    sector: "Aviation",
+    description: "The group's aviation and air-services operation.",
+    notes: "",
+    country: "Zanzibar",
+    offerings: ["Air services", "Aviation operations"],
+  },
+  {
+    slug: "zan-fast-ferries",
+    name: "Zan Fast Ferries",
+    sector: "Maritime",
+    description:
+      "High-speed passenger ferries linking Zanzibar and Dar es Salaam aboard MV Zanzibar 1 and MV Zanzibar 2.",
+    notes: "Crossing time approximately 1 hour 20 minutes.",
+    country: "Zanzibar & Mainland",
+    offerings: ["Passenger ferry service", "Zanzibar ↔ Dar es Salaam routes", "Online booking"],
+  },
+  {
+    slug: "habib-euro-diesel",
+    name: "Habib Euro Diesel (V-Diesel)",
+    sector: "Automotive",
+    description: "Diesel systems engineering, injection services and automotive solutions.",
+    notes: "Affiliate of Al Shahid Diesel System, Dubai.",
+    country: "Zanzibar",
+    offerings: ["Diesel system engineering", "Injection & pump services", "Automotive solutions"],
+  },
+  // ── Financial ───────────────────────────────────────────────
+  {
+    slug: "vigo-financial-services",
+    name: "Vigo Financial Services",
+    sector: "Financial",
+    description: "Financial services operation based in the Union of Comoros.",
+    notes: "",
+    country: "Union of Comoros",
+    offerings: ["Financial services"],
+  },
+  // ── Services ────────────────────────────────────────────────
   {
     slug: "v-clean",
     name: "V-Clean",
     sector: "Services",
-    description: "Group services company.",
-    notes: "Limited public detail available; verify scope directly with the group.",
-    offerings: ["Group services"],
+    description: "Group cleaning and facilities services company.",
+    notes: "",
+    country: "Zanzibar",
+    offerings: ["Cleaning services", "Facilities support"],
   },
 ];
 
 /** Ordered list of sectors that actually have companies (for filters/tabs). */
-export const activeSectors: Sector[] = Array.from(
-  new Set(companies.map((c) => c.sector)),
-);
+export const activeSectors: Sector[] = Array.from(new Set(companies.map((c) => c.sector)));
 
 export function getCompany(slug: string): Company | undefined {
   return companies.find((c) => c.slug === slug);

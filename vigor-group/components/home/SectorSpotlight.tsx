@@ -32,7 +32,7 @@ export function SectorSpotlight() {
 
   return (
     <div
-      className="relative overflow-hidden rounded-3xl border border-ink-900/10 bg-ink-900 text-white"
+      className="relative overflow-hidden rounded-3xl border border-graphite-900/10 bg-graphite-900 text-white"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocus={() => setPaused(true)}
@@ -42,7 +42,13 @@ export function SectorSpotlight() {
     >
       <div
         aria-hidden="true"
-        className="absolute -right-24 -top-24 h-80 w-80 rounded-full bg-gold-500/20 blur-3xl"
+        className="absolute inset-x-0 top-0 h-1 transition-colors duration-500"
+        style={{ backgroundColor: meta.color }}
+      />
+      <div
+        aria-hidden="true"
+        className="absolute -right-24 -top-24 h-80 w-80 rounded-full blur-3xl transition-colors duration-500"
+        style={{ backgroundColor: `${meta.color}33` }}
       />
       <div className="relative grid gap-8 p-8 sm:p-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
         <AnimatePresence mode="wait">
@@ -53,19 +59,25 @@ export function SectorSpotlight() {
             exit={{ opacity: 0, x: -24 }}
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
           >
-            <span className="grid h-14 w-14 place-items-center rounded-2xl bg-white/10 text-gold-200">
+            <span
+              className="grid h-14 w-14 place-items-center rounded-2xl text-white"
+              style={{ backgroundColor: `${meta.color}40` }}
+            >
               <Icon name={meta.icon} className="h-7 w-7" />
             </span>
-            <p className="mt-6 text-xs font-medium uppercase tracking-[0.18em] text-gold-200">
+            <p
+              className="mt-6 text-xs font-medium uppercase tracking-[0.18em]"
+              style={{ color: meta.color }}
+            >
               Sector {index + 1} of {count}
             </p>
             <h3 className="mt-2 font-heading text-3xl font-semibold sm:text-4xl">
               {meta.label}
             </h3>
-            <p className="mt-4 max-w-md text-sand-100/80">{meta.blurb}</p>
+            <p className="mt-4 max-w-md text-graphite-100/80">{meta.blurb}</p>
             <Link
               href="/companies"
-              className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-gold-200 hover:text-white"
+              className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-brand-200 hover:text-white"
             >
               View {meta.label.toLowerCase()} companies
               <ArrowRight className="h-4 w-4" strokeWidth={2} />
@@ -86,10 +98,10 @@ export function SectorSpotlight() {
               <li key={c.slug}>
                 <Link
                   href={`/companies/${c.slug}`}
-                  className="flex items-center justify-between rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm transition-colors hover:border-gold-300/40 hover:bg-white/10"
+                  className="flex items-center justify-between rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm transition-colors hover:border-brand-300/40 hover:bg-white/10"
                 >
                   <span className="font-medium">{c.name}</span>
-                  <ArrowRight className="h-4 w-4 text-gold-200" strokeWidth={1.8} />
+                  <ArrowRight className="h-4 w-4 text-brand-200" strokeWidth={1.8} />
                 </Link>
               </li>
             ))}
@@ -108,7 +120,7 @@ export function SectorSpotlight() {
               onClick={() => setIndex(i)}
               className={cn(
                 "h-1.5 rounded-full transition-all duration-300",
-                i === index ? "w-8 bg-gold-300" : "w-3 bg-white/25 hover:bg-white/50",
+                i === index ? "w-8 bg-brand-300" : "w-3 bg-white/25 hover:bg-white/50",
               )}
             />
           ))}
@@ -118,7 +130,7 @@ export function SectorSpotlight() {
             type="button"
             onClick={() => go(-1)}
             aria-label="Previous sector"
-            className="grid h-9 w-9 place-items-center rounded-full border border-white/15 text-white/80 hover:border-gold-300 hover:text-white"
+            className="grid h-9 w-9 place-items-center rounded-full border border-white/15 text-white/80 hover:border-brand-300 hover:text-white"
           >
             <ChevronLeft className="h-4 w-4" />
           </button>
@@ -126,7 +138,7 @@ export function SectorSpotlight() {
             type="button"
             onClick={() => go(1)}
             aria-label="Next sector"
-            className="grid h-9 w-9 place-items-center rounded-full border border-white/15 text-white/80 hover:border-gold-300 hover:text-white"
+            className="grid h-9 w-9 place-items-center rounded-full border border-white/15 text-white/80 hover:border-brand-300 hover:text-white"
           >
             <ChevronRight className="h-4 w-4" />
           </button>

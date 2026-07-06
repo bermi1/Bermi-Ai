@@ -10,6 +10,7 @@ import { ValuesSection } from "@/components/ValuesSection";
 import { LeadershipStrip } from "@/components/LeadershipStrip";
 import { GlobalPresence } from "@/components/GlobalPresence";
 import { Partners } from "@/components/Partners";
+import { MissionVision } from "@/components/MissionVision";
 import { CTABand } from "@/components/CTABand";
 import { CompanyCard } from "@/components/CompanyCard";
 import { Reveal } from "@/components/motion/Reveal";
@@ -32,7 +33,7 @@ export default function HomePage() {
       <section className="container py-20 sm:py-24">
         <Reveal>
           <SectionHeading
-            eyebrow="Seven sectors, one group"
+            eyebrow={`${group.stats.sectors} sectors, one group`}
             title="A conglomerate built for life and business"
             intro="Explore the sectors the group operates across — each one home to companies serving Zanzibar, mainland Tanzania and the Union of Comoros."
           />
@@ -42,14 +43,32 @@ export default function HomePage() {
         </Reveal>
       </section>
 
+      {/* Mission & vision */}
+      <section className="bg-graphite-100/70 py-20 sm:py-24">
+        <div className="container">
+          <Reveal>
+            <SectionHeading
+              align="center"
+              className="mx-auto"
+              eyebrow="Who we are"
+              title="Serving people, serving nations"
+              intro={group.positioningShort}
+            />
+          </Reveal>
+          <div className="mt-12">
+            <MissionVision />
+          </div>
+        </div>
+      </section>
+
       {/* Companies preview */}
-      <section className="bg-sand-100/70 py-20 sm:py-24">
+      <section className="py-20 sm:py-24">
         <div className="container">
           <Reveal className="flex flex-wrap items-end justify-between gap-6">
             <SectionHeading
               eyebrow="Our companies"
-              title="Sixteen companies under one roof"
-              intro="A preview of the group. Each has its own home within the same unified system."
+              title={`${group.stats.companies} companies under one roof`}
+              intro="A preview of the group. Each has its own home — and its own identity — within the same unified system."
             />
             <ButtonLink href="/companies" variant="outline">
               View all companies
@@ -72,7 +91,7 @@ export default function HomePage() {
       <GlobalPresence />
 
       {/* Leadership */}
-      <section className="bg-sand-100/70 py-20 sm:py-24">
+      <section className="bg-graphite-100/70 py-20 sm:py-24">
         <div className="container">
           <Reveal>
             <SectionHeading
@@ -87,7 +106,7 @@ export default function HomePage() {
           <Reveal className="mt-10">
             <Link
               href="/about"
-              className="inline-flex items-center gap-1.5 text-sm font-medium text-ink-800 hover:text-gold-700"
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-graphite-800 hover:text-brand-700"
             >
               Read the group&apos;s story
               <ArrowRight className="h-4 w-4" strokeWidth={2} />

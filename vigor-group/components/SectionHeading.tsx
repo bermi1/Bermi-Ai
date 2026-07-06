@@ -5,7 +5,7 @@ export function Eyebrow({ children, dark }: { children: React.ReactNode; dark?: 
     <span
       className={cn(
         "text-xs font-semibold uppercase tracking-[0.16em]",
-        dark ? "text-gold-200" : "text-gold-700",
+        dark ? "text-brand-200" : "text-brand-700",
       )}
     >
       {children}
@@ -40,7 +40,7 @@ export function SectionHeading({
       <h2
         className={cn(
           "mt-3 font-heading text-3xl font-semibold tracking-tight sm:text-4xl",
-          dark ? "text-white" : "text-ink-900",
+          dark ? "text-white" : "text-graphite-900",
         )}
       >
         {title}
@@ -49,7 +49,7 @@ export function SectionHeading({
         <p
           className={cn(
             "mt-4 text-lg leading-relaxed",
-            dark ? "text-sand-100/80" : "text-ink-600",
+            dark ? "text-graphite-100/80" : "text-graphite-600",
           )}
         >
           {intro}

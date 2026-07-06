@@ -35,14 +35,14 @@ export function Navbar() {
       className={cn(
         "fixed inset-x-0 top-0 z-50 transition-colors duration-300 ease-out",
         solid
-          ? "border-b border-ink-900/10 bg-sand-50/90 backdrop-blur-md"
+          ? "border-b border-graphite-900/10 bg-graphite-50/90 backdrop-blur-md"
           : "border-b border-transparent bg-transparent",
       )}
     >
       <nav className="container flex h-16 items-center justify-between md:h-20">
         <Link
           href="/"
-          className="rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400"
+          className="rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400"
           aria-label={`${group.tradingName} home`}
         >
           <Wordmark tone={solid ? "ink" : "light"} />
@@ -59,9 +59,9 @@ export function Navbar() {
                   className={cn(
                     "relative rounded-full px-4 py-2 text-sm font-medium transition-colors",
                     solid
-                      ? "text-ink-700 hover:text-ink-900"
+                      ? "text-graphite-700 hover:text-graphite-900"
                       : "text-white/85 hover:text-white",
-                    active && (solid ? "text-ink-900" : "text-white"),
+                    active && (solid ? "text-graphite-900" : "text-white"),
                   )}
                 >
                   {item.label}
@@ -70,7 +70,7 @@ export function Navbar() {
                       layoutId="nav-underline"
                       className={cn(
                         "absolute inset-x-3 -bottom-0.5 h-0.5 rounded-full",
-                        solid ? "bg-gold-400" : "bg-white",
+                        solid ? "bg-brand-400" : "bg-white",
                       )}
                     />
                   )}
@@ -90,7 +90,7 @@ export function Navbar() {
           type="button"
           className={cn(
             "inline-flex h-10 w-10 items-center justify-center rounded-full lg:hidden",
-            solid ? "text-ink-800 hover:bg-ink-900/5" : "text-white hover:bg-white/10",
+            solid ? "text-graphite-800 hover:bg-graphite-900/5" : "text-white hover:bg-white/10",
           )}
           aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
@@ -107,7 +107,7 @@ export function Navbar() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            className="overflow-hidden border-t border-ink-900/10 bg-sand-50 lg:hidden"
+            className="overflow-hidden border-t border-graphite-900/10 bg-graphite-50 lg:hidden"
           >
             <ul className="container flex flex-col gap-1 py-4">
               {nav.map((item) => {
@@ -120,8 +120,8 @@ export function Navbar() {
                       className={cn(
                         "block rounded-xl px-4 py-3 text-base font-medium transition-colors",
                         active
-                          ? "bg-ink-800/8 text-ink-900"
-                          : "text-ink-700 hover:bg-ink-900/5",
+                          ? "bg-graphite-800/8 text-graphite-900"
+                          : "text-graphite-700 hover:bg-graphite-900/5",
                       )}
                     >
                       {item.label}

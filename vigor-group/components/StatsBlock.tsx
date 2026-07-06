@@ -10,14 +10,14 @@ export function StatsBlock() {
     { value: group.stats.countries, suffix: "", label: "Countries of operation" },
   ];
   return (
-    <Reveal className="rounded-3xl bg-ink-900 px-8 py-12 text-white sm:px-12">
+    <Reveal className="rounded-3xl bg-graphite-900 px-8 py-12 text-white sm:px-12">
       <dl className="grid gap-8 text-center sm:grid-cols-3">
         {stats.map((s) => (
           <div key={s.label}>
-            <dt className="font-heading text-5xl font-semibold text-gold-200">
+            <dt className="font-heading text-5xl font-semibold text-brand-200">
               <CountUp value={s.value} suffix={s.suffix} />
             </dt>
-            <dd className="mt-2 text-sm text-sand-100/75">{s.label}</dd>
+            <dd className="mt-2 text-sm text-graphite-100/75">{s.label}</dd>
           </div>
         ))}
       </dl>

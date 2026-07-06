@@ -36,7 +36,7 @@ export function CompanyGrid() {
         </label>
         <div className="relative max-w-md">
           <Search
-            className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-400"
+            className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-graphite-400"
             strokeWidth={1.8}
           />
           <input
@@ -45,14 +45,14 @@ export function CompanyGrid() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search companies…"
-            className="w-full rounded-full border border-ink-900/15 bg-white py-2.5 pl-10 pr-10 text-sm text-ink-900 placeholder:text-ink-400 focus:border-ink-500 focus:outline-none focus:ring-2 focus:ring-gold-300"
+            className="w-full rounded-full border border-graphite-900/15 bg-white py-2.5 pl-10 pr-10 text-sm text-graphite-900 placeholder:text-graphite-400 focus:border-graphite-500 focus:outline-none focus:ring-2 focus:ring-brand-300"
           />
           {query && (
             <button
               type="button"
               onClick={() => setQuery("")}
               aria-label="Clear search"
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-400 hover:text-ink-700"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-graphite-400 hover:text-graphite-700"
             >
               <X className="h-4 w-4" />
             </button>
@@ -74,14 +74,14 @@ export function CompanyGrid() {
               aria-selected={active}
               onClick={() => setFilter(f)}
               className={cn(
-                "relative rounded-full px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2",
-                active ? "text-white" : "text-ink-700 hover:text-ink-900",
+                "relative rounded-full px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 focus-visible:ring-offset-2",
+                active ? "text-white" : "text-graphite-700 hover:text-graphite-900",
               )}
             >
               {active && (
                 <motion.span
                   layoutId="chip-active"
-                  className="absolute inset-0 rounded-full bg-ink-800"
+                  className="absolute inset-0 rounded-full bg-graphite-800"
                   transition={{ type: "spring", stiffness: 380, damping: 32 }}
                 />
               )}
@@ -102,9 +102,9 @@ export function CompanyGrid() {
       </LayoutGroup>
 
       {visible.length === 0 && (
-        <div className="rounded-2xl border border-dashed border-ink-900/15 bg-white/50 p-10 text-center">
-          <p className="font-heading text-lg font-semibold text-ink-900">No companies found</p>
-          <p className="mt-1.5 text-sm text-ink-600">
+        <div className="rounded-2xl border border-dashed border-graphite-900/15 bg-white/50 p-10 text-center">
+          <p className="font-heading text-lg font-semibold text-graphite-900">No companies found</p>
+          <p className="mt-1.5 text-sm text-graphite-600">
             Try a different search term or sector filter.
           </p>
           <button
@@ -113,14 +113,14 @@ export function CompanyGrid() {
               setQuery("");
               setFilter("All");
             }}
-            className="mt-4 rounded-full bg-ink-800 px-4 py-2 text-sm font-medium text-white hover:bg-ink-900"
+            className="mt-4 rounded-full bg-graphite-800 px-4 py-2 text-sm font-medium text-white hover:bg-graphite-900"
           >
             Reset filters
           </button>
         </div>
       )}
 
-      <p className="mt-8 text-sm text-ink-500" aria-live="polite">
+      <p className="mt-8 text-sm text-graphite-500" aria-live="polite">
         Showing {visible.length} of {companies.length} companies
         {filter !== "All" ? ` in ${filter}` : ""}
         {query ? ` matching “${query}”` : ""}.

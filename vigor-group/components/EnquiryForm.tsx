@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const inputClass =
-  "w-full rounded-xl border border-ink-900/15 bg-white px-4 py-3 text-sm text-ink-900 placeholder:text-ink-400 focus:border-ink-500 focus:outline-none focus:ring-2 focus:ring-gold-300";
+  "w-full rounded-xl border border-graphite-900/15 bg-white px-4 py-3 text-sm text-graphite-900 placeholder:text-graphite-400 focus:border-graphite-500 focus:outline-none focus:ring-2 focus:ring-brand-300";
 
 /**
  * Front-end-only enquiry form. Composes a mailto: to the group inbox — no
@@ -46,11 +46,11 @@ export function EnquiryForm({
     <form onSubmit={onSubmit} className="space-y-4">
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="block">
-          <span className="mb-1.5 block text-sm font-medium text-ink-800">Name</span>
+          <span className="mb-1.5 block text-sm font-medium text-graphite-800">Name</span>
           <input required name="name" type="text" className={inputClass} placeholder="Your name" />
         </label>
         <label className="block">
-          <span className="mb-1.5 block text-sm font-medium text-ink-800">Email</span>
+          <span className="mb-1.5 block text-sm font-medium text-graphite-800">Email</span>
           <input
             required
             name="email"
@@ -63,7 +63,7 @@ export function EnquiryForm({
 
       {showSubject && (
         <label className="block">
-          <span className="mb-1.5 block text-sm font-medium text-ink-800">Subject</span>
+          <span className="mb-1.5 block text-sm font-medium text-graphite-800">Subject</span>
           <input
             name="subject"
             type="text"
@@ -75,7 +75,7 @@ export function EnquiryForm({
       )}
 
       <label className="block">
-        <span className="mb-1.5 block text-sm font-medium text-ink-800">Message</span>
+        <span className="mb-1.5 block text-sm font-medium text-graphite-800">Message</span>
         <textarea
           required
           name="message"
@@ -91,8 +91,8 @@ export function EnquiryForm({
           Send message
         </Button>
         {sent && (
-          <span className="inline-flex items-center gap-1.5 text-sm font-medium text-ink-600">
-            <Check className="h-4 w-4 text-gold-600" /> Opening your email app…
+          <span className="inline-flex items-center gap-1.5 text-sm font-medium text-graphite-600">
+            <Check className="h-4 w-4 text-brand-600" /> Opening your email app…
           </span>
         )}
       </div>

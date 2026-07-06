@@ -4,15 +4,16 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 rounded-full font-medium transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-sand-50 disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center gap-2 rounded-full font-medium transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 focus-visible:ring-offset-2 focus-visible:ring-offset-graphite-50 disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
-        primary: "bg-ink-800 text-sand-50 hover:bg-ink-900 hover:shadow-lift",
-        gold: "bg-gold-400 text-ink-900 hover:bg-gold-500 hover:shadow-lift",
+        primary: "bg-brand-600 text-white hover:bg-brand-700 hover:shadow-lift",
+        gold: "bg-white text-brand-700 hover:bg-graphite-100 hover:shadow-lift",
+        dark: "bg-graphite-900 text-white hover:bg-graphite-800 hover:shadow-lift",
         outline:
-          "border border-ink-800/25 bg-transparent text-ink-800 hover:border-ink-800 hover:bg-ink-800/5",
-        ghost: "bg-transparent text-ink-800 hover:bg-ink-800/5",
+          "border border-graphite-300 bg-transparent text-graphite-800 hover:border-graphite-800 hover:bg-graphite-900/5",
+        ghost: "bg-transparent text-graphite-800 hover:bg-graphite-900/5",
         onDark:
           "border border-white/30 bg-white/10 text-white backdrop-blur hover:bg-white/20",
       },

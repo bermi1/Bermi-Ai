@@ -12,12 +12,12 @@ export function LeadershipStrip({ withBio = false }: { withBio?: boolean }) {
             icon="landmark"
             aspect="aspect-[4/5]"
           />
-          <h3 className="mt-4 font-heading text-lg font-semibold text-ink-900">
+          <h3 className="mt-4 font-heading text-lg font-semibold text-graphite-900">
             {person.name}
           </h3>
-          <p className="text-sm font-medium text-gold-700">{person.title}</p>
+          <p className="text-sm font-medium text-brand-700">{person.title}</p>
           {withBio && (
-            <p className="mt-2 text-sm leading-relaxed text-ink-600">{person.bio}</p>
+            <p className="mt-2 text-sm leading-relaxed text-graphite-600">{person.bio}</p>
           )}
         </RevealItem>
       ))}

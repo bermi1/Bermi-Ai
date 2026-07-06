@@ -32,16 +32,16 @@ export default function CareersPage() {
         <div className="mt-10">
           <CareersList />
         </div>
-        <p className="mt-8 rounded-xl border border-dashed border-ink-900/15 bg-white/50 p-4 text-sm text-ink-500">
+        <p className="mt-8 rounded-xl border border-dashed border-graphite-900/15 bg-white/50 p-4 text-sm text-graphite-500">
           Listings shown are placeholder samples. Replace them in{" "}
-          <code className="rounded bg-ink-900/5 px-1.5 py-0.5 font-mono text-xs">
+          <code className="rounded bg-graphite-900/5 px-1.5 py-0.5 font-mono text-xs">
             data/careers.ts
           </code>{" "}
           or wire this page to an applicant-tracking system.
         </p>
       </section>
 
-      <section className="bg-sand-100/70 py-16">
+      <section className="bg-graphite-100/70 py-16">
         <div className="container grid gap-12 lg:grid-cols-2">
           <Reveal>
             <SectionHeading
@@ -50,7 +50,7 @@ export default function CareersPage() {
               intro="Tell us what you do and where you'd like to work in the group. We keep applications on file across all companies."
             />
           </Reveal>
-          <Reveal delay={0.05} className="rounded-2xl border border-ink-900/10 bg-white p-6 sm:p-8">
+          <Reveal delay={0.05} className="rounded-2xl border border-graphite-900/10 bg-white p-6 sm:p-8">
             <EnquiryForm
               subjectPrefix="Open application"
               defaultSubject="Open application"

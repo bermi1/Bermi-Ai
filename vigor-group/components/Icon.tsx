@@ -13,6 +13,10 @@ import {
   RadioTower,
   Wrench,
   Sparkles,
+  Truck,
+  Ship,
+  Plane,
+  Wallet,
   type LucideIcon,
 } from "lucide-react";
 
@@ -32,6 +36,10 @@ const map: Record<string, LucideIcon> = {
   "radio-tower": RadioTower,
   wrench: Wrench,
   sparkles: Sparkles,
+  truck: Truck,
+  ship: Ship,
+  plane: Plane,
+  wallet: Wallet,
 };
 
 export function Icon({

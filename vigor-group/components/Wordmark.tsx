@@ -1,10 +1,32 @@
 import { cn } from "@/lib/utils";
 
 /**
- * PLACEHOLDER wordmark — a typographic lockup until Vigor Group supplies a
- * real logo. The "V" monogram sits in a gold roundel; the group name in the
- * heading serif reinforces the heritage positioning.
+ * VIGOR wordmark — a faithful re-creation of the official logo lockup:
+ * a red "V" mark (with the silver swoosh accent), the VIGOR wordmark, and the
+ * "A Turky's Group of Companies · Since 1980" descriptor.
+ * Replace the SVG with the supplied vector logo file when available.
  */
+export function VMark({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 100 92" className={className} role="img" aria-label="VIGOR">
+      {/* silver swoosh accent (behind) */}
+      <path
+        d="M30 6 L58 6 L44 34 Z"
+        fill="#b8babf"
+      />
+      {/* red V */}
+      <path
+        d="M12 8 L50 84 L88 8"
+        fill="none"
+        stroke="#d81f26"
+        strokeWidth="17"
+        strokeLinejoin="round"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
 export function Wordmark({
   tone = "ink",
   className,
@@ -14,28 +36,23 @@ export function Wordmark({
 }) {
   return (
     <span className={cn("flex items-center gap-2.5", className)}>
-      <span
-        aria-hidden="true"
-        className="grid h-9 w-9 place-items-center rounded-xl bg-gold-400 font-heading text-lg font-bold text-ink-900"
-      >
-        V
-      </span>
+      <VMark className="h-9 w-9" />
       <span className="flex flex-col leading-none">
         <span
           className={cn(
-            "font-heading text-lg font-semibold tracking-tight",
-            tone === "ink" ? "text-ink-900" : "text-white",
+            "font-heading text-xl font-bold tracking-tight",
+            tone === "ink" ? "text-brand-600" : "text-white",
           )}
         >
-          Vigor Group
+          VIGOR
         </span>
         <span
           className={cn(
-            "text-[10px] font-medium uppercase tracking-[0.18em]",
-            tone === "ink" ? "text-ink-500" : "text-white/70",
+            "mt-0.5 text-[9px] font-semibold uppercase tracking-[0.14em]",
+            tone === "ink" ? "text-graphite-500" : "text-white/70",
           )}
         >
-          of Companies
+          A Turky&apos;s Group · Since 1980
         </span>
       </span>
     </span>

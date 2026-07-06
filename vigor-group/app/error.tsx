@@ -17,8 +17,8 @@ export default function Error({
 
   return (
     <section className="container flex min-h-[70vh] flex-col items-center justify-center py-32 text-center">
-      <p className="font-heading text-5xl font-semibold text-gold-500">Something went wrong</p>
-      <p className="mt-4 max-w-md text-ink-600">
+      <p className="font-heading text-5xl font-semibold text-brand-500">Something went wrong</p>
+      <p className="mt-4 max-w-md text-graphite-600">
         An unexpected error occurred. You can try again, or head back to the home page.
       </p>
       <div className="mt-8 flex flex-wrap justify-center gap-3">

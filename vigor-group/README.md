@@ -84,11 +84,16 @@ card and sitemap entry appear automatically. No new page files, no component edi
 
 ### Brand palette
 
-Edit the `colors` block in **`tailwind.config.ts`**:
+The palette is derived from the **official VIGOR logo** (red + silver). Edit the `colors`
+block in **`tailwind.config.ts`**:
 
-- `ink` — deep indigo/teal primary (coastal Zanzibar + institutional trust)
-- `gold` — warm gold/sand accent (heritage, hospitality, founding-family legacy)
-- `sand` — off-white background
+- `brand` — VIGOR red (`#d81f26`), the group's core identity
+- `graphite` — the logo's silver/charcoal, used for clean neutral UI and text
+- white / light grey grounds for a clean, modern look
+
+**Per-unit identity:** every sector/subsidiary also has its own accent colour in
+`data/site.ts → sectorMeta.color`. Company cards, company pages and the home spotlight tint
+themselves with that colour, so each unit has a distinct identity while red unifies the group.
 
 ### Fonts
 
@@ -114,22 +119,21 @@ either for a CMS/markdown/ATS loader later while keeping the same exported shape
 The following are **deliberate placeholders** until Vigor Group supplies real brand assets and
 content. They are safe to replace without touching layout code:
 
-- **Brand palette & fonts** — chosen to read Zanzibari and heritage-led, _not_ the group's
-  official brand guidelines. See `tailwind.config.ts` and `app/layout.tsx`.
-- **Logo / wordmark** — a typographic "V" lockup in `components/Wordmark.tsx`.
-- **All photography** — rendered as branded gradient panels via
+- **Brand colour** — the VIGOR red is taken from the official logo. Fonts (`Fraunces`/`Inter`)
+  are a tasteful default pending the group's official typefaces.
+- **Logo / wordmark** — a vector re-creation of the VIGOR "V" mark in `components/Wordmark.tsx`.
+  Replace with the supplied vector logo file when available.
+- **All photography** — rendered as accent-tinted gradient panels via
   `components/PlaceholderImage.tsx` (with descriptive `alt`/`aria-label` text). No stock or
-  fabricated photography is used, per the brief. Swap for `next/image` when real photos exist.
-- **Leadership photos** — placeholder panels; names and titles are the real ones from the brief.
+  fabricated photography is used. Swap for `next/image` when real photos exist.
+- **Leadership photos** — placeholder panels; names and titles are real.
 - **News & press** — three sample entries in `data/news.ts`.
 - **Careers** — sample roles in `data/careers.ts`.
-- **Contact phone & email, map embed** — placeholder values in `data/site.ts`; the map is a
-  styled placeholder, not a live embed.
-- **`group.url`** in `data/site.ts` — set this to the real production domain so canonical URLs,
-  OpenGraph tags and the sitemap point to the correct host.
+- **Map embed** — the contact map is a styled placeholder, not a live embed.
 
-Only facts supplied in the brief (leadership names/titles, the 16 companies, HQ address, scale
-figures) are used as real content. No financial figures, staff names or photography have been
+Content (mission, vision, values, history, sectors, subsidiaries, leadership, HQ address, phone
+and email) is compiled from the group's own public sources (turkysgroup.co.tz, The Citizen, ZIBI
+magazine, LinkedIn). No financial figures, staff names or photography have been
 fabricated.
 
 > Note on the name: despite the surname's resemblance, the group has **no** connection to the

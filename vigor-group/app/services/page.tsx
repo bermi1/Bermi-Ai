@@ -43,30 +43,30 @@ export default function ServicesPage() {
               <RevealItem
                 as="li"
                 key={cat.title}
-                className="flex flex-col rounded-2xl border border-ink-900/10 bg-white p-7 shadow-card"
+                className="flex flex-col rounded-2xl border border-graphite-900/10 bg-white p-7 shadow-card"
               >
                 <div className="flex items-start gap-4">
-                  <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-gold-100 text-gold-700">
+                  <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-brand-100 text-brand-700">
                     <Icon name={cat.icon} className="h-6 w-6" />
                   </span>
                   <div>
-                    <h3 className="font-heading text-lg font-semibold text-ink-900">
+                    <h3 className="font-heading text-lg font-semibold text-graphite-900">
                       {cat.title}
                     </h3>
-                    <p className="mt-1 text-sm text-ink-600">{cat.description}</p>
+                    <p className="mt-1 text-sm text-graphite-600">{cat.description}</p>
                   </div>
                 </div>
 
-                <ul className="mt-5 flex flex-1 flex-col gap-2 border-t border-ink-900/8 pt-5">
+                <ul className="mt-5 flex flex-1 flex-col gap-2 border-t border-graphite-900/8 pt-5">
                   {linked.map((c) => (
                     <li key={c.slug}>
                       <Link
                         href={`/companies/${c.slug}`}
-                        className="group flex items-center justify-between rounded-lg px-3 py-2 text-sm text-ink-700 transition-colors hover:bg-sand-100"
+                        className="group flex items-center justify-between rounded-lg px-3 py-2 text-sm text-graphite-700 transition-colors hover:bg-graphite-100"
                       >
                         <span className="font-medium">{c.name}</span>
                         <ArrowRight
-                          className="h-4 w-4 text-gold-600 transition-transform group-hover:translate-x-0.5"
+                          className="h-4 w-4 text-brand-600 transition-transform group-hover:translate-x-0.5"
                           strokeWidth={1.8}
                         />
                       </Link>

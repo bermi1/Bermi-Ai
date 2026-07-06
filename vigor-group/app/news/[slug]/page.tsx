@@ -31,19 +31,19 @@ export default function NewsPostPage({ params }: { params: { slug: string } }) {
       <article className="container max-w-3xl pb-8 pt-32 sm:pt-40">
         <Link
           href="/news"
-          className="inline-flex items-center gap-1.5 text-sm text-ink-600 hover:text-ink-900"
+          className="inline-flex items-center gap-1.5 text-sm text-graphite-600 hover:text-graphite-900"
         >
           <ArrowLeft className="h-4 w-4" strokeWidth={1.8} /> All news
         </Link>
 
         <div className="mt-6 flex items-center gap-3">
           <Badge tone="gold">{post.category}</Badge>
-          <time className="text-sm text-ink-500" dateTime={post.date}>
+          <time className="text-sm text-graphite-500" dateTime={post.date}>
             {formatDate(post.date)}
           </time>
         </div>
 
-        <h1 className="mt-4 font-heading text-4xl font-semibold leading-tight tracking-tight text-ink-900">
+        <h1 className="mt-4 font-heading text-4xl font-semibold leading-tight tracking-tight text-graphite-900">
           {post.title}
         </h1>
 
@@ -54,13 +54,13 @@ export default function NewsPostPage({ params }: { params: { slug: string } }) {
           className="mt-8"
         />
 
-        <div className="prose mt-8 space-y-5 text-lg leading-relaxed text-ink-700">
+        <div className="prose mt-8 space-y-5 text-lg leading-relaxed text-graphite-700">
           {post.body.map((para, i) => (
             <p key={i}>{para}</p>
           ))}
         </div>
 
-        <p className="mt-10 rounded-xl border border-dashed border-ink-900/15 bg-white/50 p-4 text-sm text-ink-500">
+        <p className="mt-10 rounded-xl border border-dashed border-graphite-900/15 bg-white/50 p-4 text-sm text-graphite-500">
           Sample article — placeholder content pending real press material.
         </p>
       </article>

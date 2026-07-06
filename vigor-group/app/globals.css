@@ -13,12 +13,12 @@
   }
 
   body {
-    @apply bg-sand-50 text-ink-800 antialiased;
+    @apply bg-graphite-50 text-graphite-800 antialiased;
     font-feature-settings: "kern", "liga";
   }
 
   ::selection {
-    @apply bg-gold-200 text-ink-900;
+    @apply bg-brand-200 text-graphite-900;
   }
 
   /* Respect users who prefer reduced motion. */

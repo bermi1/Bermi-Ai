@@ -15,7 +15,7 @@ export default function CompaniesPage() {
     <>
       <PageHeader
         eyebrow="Our companies"
-        title="One group, sixteen companies"
+        title="One group, many companies"
         intro="Every subsidiary lives inside the same unified system — filter by sector to find the company you need."
       />
       <section className="container py-16">
