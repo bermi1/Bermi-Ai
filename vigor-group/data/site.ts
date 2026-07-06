@@ -56,6 +56,84 @@ export const leadership = [
   },
 ];
 
+/**
+ * Heads of divisions — one leader card per business division, each carrying
+ * the division's accent colour, a photo slot, the role, and contact links.
+ *
+ * ⚠️ Only the three group executives above are verified public names.
+ * Division-head `name` values are left as null until the group supplies
+ * them — set `name`, `photoUrl` and `linkedin` here and the cards update
+ * everywhere automatically. Do NOT invent names.
+ */
+export interface DivisionHead {
+  division: string;
+  sector: Sector;
+  role: string;
+  name: string | null; // null → renders as "Appointment to be announced"
+  photoUrl?: string;
+  linkedin?: string;
+  email?: string;
+}
+
+export const divisionHeads: DivisionHead[] = [
+  {
+    division: "Healthcare",
+    sector: "Healthcare",
+    role: "Head of Healthcare Division",
+    name: null,
+    email: "info@turkysgroup.co.tz",
+  },
+  {
+    division: "Hospitality",
+    sector: "Hospitality",
+    role: "Head of Hospitality Division",
+    name: null,
+    email: "info@turkysgroup.co.tz",
+  },
+  {
+    division: "Real Estate",
+    sector: "Real Estate",
+    role: "Head of Real Estate Division",
+    name: null,
+    email: "info@turkysgroup.co.tz",
+  },
+  {
+    division: "Manufacturing",
+    sector: "Manufacturing",
+    role: "Head of Manufacturing Division",
+    name: null,
+    email: "info@turkysgroup.co.tz",
+  },
+  {
+    division: "Trade & Merchandise",
+    sector: "Trade",
+    role: "Head of Trade Division",
+    name: null,
+    email: "info@turkysgroup.co.tz",
+  },
+  {
+    division: "Energy",
+    sector: "Energy",
+    role: "Head of Energy Division",
+    name: null,
+    email: "info@turkysgroup.co.tz",
+  },
+  {
+    division: "Logistics & Transport",
+    sector: "Maritime",
+    role: "Head of Logistics & Transport",
+    name: null,
+    email: "info@turkysgroup.co.tz",
+  },
+  {
+    division: "Communications",
+    sector: "Communications",
+    role: "Head of Communications Division",
+    name: null,
+    email: "info@turkysgroup.co.tz",
+  },
+];
+
 export const founders = {
   intro:
     "The group traces its roots to the early 1980s, when the Turky family opened a small tailoring mart in Zanzibar — founded on craftsmanship, dedication and family values, and incorporated in 1980 as Turky's Group of Companies Limited.",

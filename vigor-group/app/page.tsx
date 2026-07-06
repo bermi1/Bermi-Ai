@@ -7,7 +7,7 @@ import { Hero } from "@/components/home/Hero";
 import { SectorSpotlight } from "@/components/home/SectorSpotlight";
 import { SectionHeading } from "@/components/SectionHeading";
 import { ValuesSection } from "@/components/ValuesSection";
-import { LeadershipStrip } from "@/components/LeadershipStrip";
+import { DivisionHeads } from "@/components/DivisionHeads";
 import { GlobalPresence } from "@/components/GlobalPresence";
 import { Partners } from "@/components/Partners";
 import { MissionVision } from "@/components/MissionVision";
@@ -90,18 +90,18 @@ export default function HomePage() {
       {/* Global presence */}
       <GlobalPresence />
 
-      {/* Leadership */}
+      {/* Leadership & division heads */}
       <section className="bg-graphite-100/70 py-20 sm:py-24">
         <div className="container">
           <Reveal>
             <SectionHeading
               eyebrow="Leadership"
-              title="Guided by the Turky family"
-              intro="Four decades on, the group is led by the next generation of the founding family."
+              title="The people behind every division"
+              intro="Guided by the Turky family since 1980 — with a dedicated head for each business division, each carrying their division's colours."
             />
           </Reveal>
           <div className="mt-12">
-            <LeadershipStrip />
+            <DivisionHeads />
           </div>
           <Reveal className="mt-10">
             <Link

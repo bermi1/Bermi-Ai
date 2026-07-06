@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Inter } from "next/font/google";
+import { Space_Grotesk, Inter } from "next/font/google";
 import "./globals.css";
 import { group } from "@/data/site";
 import { Navbar } from "@/components/Navbar";
@@ -7,12 +7,11 @@ import { Footer } from "@/components/Footer";
 import { OrganizationJsonLd } from "@/components/JsonLd";
 
 /**
- * PLACEHOLDER type system (see README > "Brand & design"):
- *   - Fraunces  → confident heritage serif for headings/wordmark
- *   - Inter     → clean geometric sans for body text
- * Replace these with Vigor Group's official typefaces when supplied.
+ * Modern type system (pending official brand typefaces):
+ *   - Space Grotesk → contemporary geometric display for headings/wordmark
+ *   - Inter         → clean sans for body text
  */
-const heading = Fraunces({
+const heading = Space_Grotesk({
   subsets: ["latin"],
   weight: ["500", "600", "700"],
   variable: "--font-heading",

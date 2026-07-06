@@ -15,8 +15,9 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
-  // Only the home hero is dark enough to sit a transparent nav over.
-  const overHero = pathname === "/";
+  // The home hero is light, so the nav stays solid everywhere except the
+  // dark inner-page headers, where it floats transparent until scroll.
+  const overHero = pathname !== "/";
   const solid = scrolled || !overHero || open;
 
   useEffect(() => {

@@ -3,7 +3,7 @@ import { pageMeta } from "@/lib/seo";
 import { SectionHeading } from "@/components/SectionHeading";
 import { ValuesSection } from "@/components/ValuesSection";
 import { StatsBlock } from "@/components/StatsBlock";
-import { LeadershipStrip } from "@/components/LeadershipStrip";
+import { DivisionHeads } from "@/components/DivisionHeads";
 import { CTABand } from "@/components/CTABand";
 import { PlaceholderImage } from "@/components/PlaceholderImage";
 import { Reveal, RevealGroup, RevealItem } from "@/components/motion/Reveal";
@@ -126,7 +126,7 @@ export default function AboutPage() {
           </Reveal>
 
           <div className="mt-12">
-            <LeadershipStrip withBio />
+            <DivisionHeads />
           </div>
         </div>
       </section>
