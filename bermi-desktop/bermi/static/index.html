@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bermi</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div class="grid-bg"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="dot" id="conn-dot"></span>
+      <span class="brand-name" id="brand-name">BERMI</span>
+      <span class="brand-sub">desktop</span>
+    </div>
+    <div class="meta">
+      <span id="model-tag" class="tag">—</span>
+      <span id="state-tag" class="tag state">idle</span>
+    </div>
+  </header>
+
+  <main class="stage">
+    <!-- Left: the orb -->
+    <section class="orb-wrap">
+      <canvas id="orb" width="440" height="440"></canvas>
+      <div class="orb-caption" id="orb-caption">Tap the orb or hold <kbd>Space</kbd> to speak</div>
+      <div class="controls">
+        <button id="mic" class="mic" title="Hold to talk (Space)">
+          <svg viewBox="0 0 24 24" width="26" height="26"><path fill="currentColor" d="M12 15a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-2.08A7 7 0 0 0 19 12h-2Z"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- Right: transcript + activity -->
+    <section class="panel">
+      <div class="tabs">
+        <button class="tab active" data-tab="chat">Conversation</button>
+        <button class="tab" data-tab="activity">System activity</button>
+      </div>
+
+      <div class="tabview" id="tab-chat">
+        <div id="log" class="log"></div>
+      </div>
+      <div class="tabview hidden" id="tab-activity">
+        <div id="activity" class="activity"></div>
+      </div>
+
+      <form id="composer" class="composer">
+        <input id="text" type="text" autocomplete="off" placeholder="Ask Bermi to do anything…" />
+        <button type="submit" class="send" title="Send">
+          <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M3 20.5v-6l8-2.5-8-2.5v-6l19 8.5-19 8.5Z"/></svg>
+        </button>
+      </form>
+    </section>
+  </main>
+
+  <!-- Confirmation modal -->
+  <div id="confirm-overlay" class="overlay hidden">
+    <div class="modal">
+      <div class="modal-head">⚠︎ Approve action</div>
+      <div class="modal-body">
+        <div class="mono" id="confirm-name"></div>
+        <pre class="mono" id="confirm-args"></pre>
+      </div>
+      <div class="modal-actions">
+        <button id="deny" class="btn ghost">Decline</button>
+        <button id="allow" class="btn primary">Run it</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
